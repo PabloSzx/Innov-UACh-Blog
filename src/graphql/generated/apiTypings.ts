@@ -34,7 +34,29 @@ declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
-export interface NexusGenInputs {}
+export interface NexusGenInputs {
+  BlogCreate: {
+    // input type
+    content: string; // String!
+    lead?: string | null; // String
+    title: string; // String!
+    urlSlug: string; // String!
+  };
+  BlogFilter: {
+    // input type
+    maxDate?: Date | null; // DateTime
+    minDate?: Date | null; // DateTime
+    urlSlug?: string | null; // String
+  };
+  BlogUpdate: {
+    // input type
+    _id: ObjectId; // ObjectId!
+    content: string; // String!
+    lead?: string | null; // String
+    title: string; // String!
+    urlSlug: string; // String!
+  };
+}
 
 export interface NexusGenEnums {}
 
@@ -60,7 +82,11 @@ export interface NexusGenRootTypes {
   ObjectId: ObjectId;
 }
 
-export interface NexusGenAllTypes extends NexusGenRootTypes {}
+export interface NexusGenAllTypes extends NexusGenRootTypes {
+  BlogCreate: NexusGenInputs["BlogCreate"];
+  BlogFilter: NexusGenInputs["BlogFilter"];
+  BlogUpdate: NexusGenInputs["BlogUpdate"];
+}
 
 export interface NexusGenFieldTypes {
   Blog: {
@@ -75,16 +101,41 @@ export interface NexusGenFieldTypes {
   };
   Mutation: {
     // field return type
-    ok: boolean; // Boolean!
+    createBlog: NexusGenRootTypes["Blog"]; // Blog!
+    updateBlog: NexusGenRootTypes["Blog"] | null; // Blog
   };
   Query: {
     // field return type
     blog: NexusGenRootTypes["Blog"] | null; // Blog
+    blogList: NexusGenRootTypes["Blog"][]; // [Blog!]!
     dateNow: Date; // DateTime!
   };
 }
 
-export interface NexusGenArgTypes {}
+export interface NexusGenArgTypes {
+  Mutation: {
+    createBlog: {
+      // args
+      blog: NexusGenInputs["BlogCreate"]; // BlogCreate!
+    };
+    updateBlog: {
+      // args
+      blog: NexusGenInputs["BlogUpdate"]; // BlogUpdate!
+    };
+  };
+  Query: {
+    blog: {
+      // args
+      id: ObjectId; // ObjectId!
+    };
+    blogList: {
+      // args
+      filter?: NexusGenInputs["BlogFilter"] | null; // BlogFilter
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+    };
+  };
+}
 
 export interface NexusGenAbstractResolveReturnTypes {}
 
@@ -92,7 +143,7 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "Blog" | "Mutation" | "Query";
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = "BlogCreate" | "BlogFilter" | "BlogUpdate";
 
 export type NexusGenEnumNames = never;
 

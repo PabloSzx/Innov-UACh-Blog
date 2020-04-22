@@ -5,9 +5,11 @@ import {
   ObjectNode,
   FieldNode,
   ArrayNode,
-  ScalarNode,
   Arguments,
   ArgumentsField,
+  ScalarNode,
+  InputNode,
+  InputNodeField,
   EnumNode,
 } from "gqless";
 
@@ -16,7 +18,35 @@ export const schema = {
     return new ObjectNode(
       {
         get blog() {
-          return new FieldNode(schema.Blog, undefined, true);
+          return new FieldNode(
+            schema.Blog,
+            new Arguments(
+              {
+                get id() {
+                  return new ArgumentsField(schema.ObjectId, false);
+                },
+              },
+              true
+            ),
+            true
+          );
+        },
+        get blogList() {
+          return new FieldNode(
+            new ArrayNode(schema.Blog, false),
+            new Arguments({
+              get skip() {
+                return new ArgumentsField(schema.Int, true);
+              },
+              get limit() {
+                return new ArgumentsField(schema.Int, true);
+              },
+              get filter() {
+                return new ArgumentsField(schema.BlogFilter, true);
+              },
+            }),
+            false
+          );
         },
         get dateNow() {
           return new FieldNode(schema.DateTime, undefined, false);
@@ -24,6 +54,12 @@ export const schema = {
       },
       { name: "Query", extension: ((extensions as any) || {}).Query }
     );
+  },
+  get ObjectId() {
+    return new ScalarNode({
+      name: "ObjectId",
+      extension: ((extensions as any) || {}).ObjectId,
+    });
   },
   get Blog() {
     return new ObjectNode(
@@ -53,12 +89,6 @@ export const schema = {
       { name: "Blog", extension: ((extensions as any) || {}).Blog }
     );
   },
-  get ObjectId() {
-    return new ScalarNode({
-      name: "ObjectId",
-      extension: ((extensions as any) || {}).ObjectId,
-    });
-  },
   get String() {
     return new ScalarNode({
       name: "String",
@@ -71,21 +101,103 @@ export const schema = {
       extension: ((extensions as any) || {}).DateTime,
     });
   },
+  get Int() {
+    return new ScalarNode({
+      name: "Int",
+      extension: ((extensions as any) || {}).Int,
+    });
+  },
+  get BlogFilter() {
+    return new InputNode(
+      {
+        get urlSlug() {
+          return new InputNodeField(schema.String, true);
+        },
+        get minDate() {
+          return new InputNodeField(schema.DateTime, true);
+        },
+        get maxDate() {
+          return new InputNodeField(schema.DateTime, true);
+        },
+      },
+      { name: "BlogFilter" }
+    );
+  },
   get Mutation() {
     return new ObjectNode(
       {
-        get ok() {
-          return new FieldNode(schema.Boolean, undefined, false);
+        get createBlog() {
+          return new FieldNode(
+            schema.Blog,
+            new Arguments(
+              {
+                get blog() {
+                  return new ArgumentsField(schema.BlogCreate, false);
+                },
+              },
+              true
+            ),
+            false
+          );
+        },
+        get updateBlog() {
+          return new FieldNode(
+            schema.Blog,
+            new Arguments(
+              {
+                get blog() {
+                  return new ArgumentsField(schema.BlogUpdate, false);
+                },
+              },
+              true
+            ),
+            true
+          );
         },
       },
       { name: "Mutation", extension: ((extensions as any) || {}).Mutation }
     );
   },
-  get Boolean() {
-    return new ScalarNode({
-      name: "Boolean",
-      extension: ((extensions as any) || {}).Boolean,
-    });
+  get BlogCreate() {
+    return new InputNode(
+      {
+        get title() {
+          return new InputNodeField(schema.String, false);
+        },
+        get lead() {
+          return new InputNodeField(schema.String, true);
+        },
+        get content() {
+          return new InputNodeField(schema.String, false);
+        },
+        get urlSlug() {
+          return new InputNodeField(schema.String, false);
+        },
+      },
+      { name: "BlogCreate" }
+    );
+  },
+  get BlogUpdate() {
+    return new InputNode(
+      {
+        get _id() {
+          return new InputNodeField(schema.ObjectId, false);
+        },
+        get title() {
+          return new InputNodeField(schema.String, false);
+        },
+        get lead() {
+          return new InputNodeField(schema.String, true);
+        },
+        get content() {
+          return new InputNodeField(schema.String, false);
+        },
+        get urlSlug() {
+          return new InputNodeField(schema.String, false);
+        },
+      },
+      { name: "BlogUpdate" }
+    );
   },
   get __Schema() {
     return new ObjectNode(
@@ -181,6 +293,12 @@ export const schema = {
   },
   get __TypeKind() {
     return new EnumNode({ name: "__TypeKind" });
+  },
+  get Boolean() {
+    return new ScalarNode({
+      name: "Boolean",
+      extension: ((extensions as any) || {}).Boolean,
+    });
   },
   get __Field() {
     return new ObjectNode(

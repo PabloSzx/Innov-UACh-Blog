@@ -1,7 +1,8 @@
 import { ApolloServer } from "apollo-server-micro";
-import { PageConfig } from "next";
 
-import { schema } from "../../../api-lib/schema";
+import { schema } from "../../api-lib/schema";
+
+import type { PageConfig } from "next";
 
 const server = new ApolloServer({
   schema,

@@ -25,6 +25,10 @@ const BlogSchema = createSchema(
   }
 );
 
+BlogSchema.index({
+  urlSlug: "text",
+});
+
 export type BlogDoc = ExtractDoc<typeof BlogSchema>;
 export type BlogProps = ExtractProps<typeof BlogSchema>;
 

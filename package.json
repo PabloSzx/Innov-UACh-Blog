@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze-build": "cross-env ANALYZE=true next build",
     "build": "next build",
     "dev": "next dev",
     "generate": "gqless generate",
+    "prettier": "prettier --write src/**/*.ts pages/**/*.ts api-lib/**/*.ts",
     "start": "next start"
   },
   "resolutions": {
@@ -20,7 +22,7 @@
     "gqless-hooks": "^1.0.1",
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
-    "graphql-schema-query": "^0.1.5",
+    "graphql-schema-query": "^0.1.6",
     "graphql-tag": "^2.10.3",
     "lorem-ipsum": "^2.0.3",
     "micro": "^9.3.4",
@@ -30,10 +32,12 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "shelljs": "^0.8.3",
+    "slugify": "^1.4.0",
     "ts-mongoose": "^0.0.21"
   },
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
+    "@next/bundle-analyzer": "^9.3.5",
     "@types/graphql-iso-date": "^3.3.3",
     "@types/micro": "^7.3.3",
     "@types/mongodb": "^3.5.9",
@@ -42,6 +46,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "16.9.6",
     "@types/shelljs": "^0.8.7",
+    "cross-env": "^7.0.2",
     "prettier": "^2.0.5",
     "typescript": "^3.8.3"
   },

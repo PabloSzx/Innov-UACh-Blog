@@ -2,8 +2,8 @@ import * as extensions from "../extensions";
 import {
   TypeData,
   FieldsType,
-  ScalarType,
   FieldsTypeArg,
+  ScalarType,
   EnumType,
 } from "gqless";
 
@@ -18,11 +18,25 @@ type Extension<TName extends string> = TName extends keyof typeof extensions
 type t_Query = FieldsType<
   {
     __typename: t_String<"Query">;
-    blog?: t_Blog | null;
+    blog?: FieldsTypeArg<{ id: any }, t_Blog | null>;
+    blogList: FieldsTypeArg<
+      {
+        skip?: number | null;
+        limit?: number | null;
+        filter?: BlogFilter | null;
+      },
+      t_Blog[]
+    >;
     dateNow: t_DateTime;
   },
   Extension<"Query">
 >;
+
+/**
+ * @name ObjectId
+ * @type SCALAR
+ */
+type t_ObjectId<T extends any = any> = ScalarType<T, Extension<"ObjectId">>;
 
 /**
  * @name Blog
@@ -43,12 +57,6 @@ type t_Blog = FieldsType<
 >;
 
 /**
- * @name ObjectId
- * @type SCALAR
- */
-type t_ObjectId<T extends any = any> = ScalarType<T, Extension<"ObjectId">>;
-
-/**
  * @name String
  * @type SCALAR
  */
@@ -61,25 +69,56 @@ type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
 type t_DateTime<T extends any = any> = ScalarType<T, Extension<"DateTime">>;
 
 /**
+ * @name Int
+ * @type SCALAR
+ */
+type t_Int<T extends number = number> = ScalarType<T, Extension<"Int">>;
+
+/**
+ * @name BlogFilter
+ * @type INPUT_OBJECT
+ */
+export type BlogFilter = {
+  urlSlug?: string | null;
+  minDate?: any | null;
+  maxDate?: any | null;
+};
+
+/**
  * @name Mutation
  * @type OBJECT
  */
 type t_Mutation = FieldsType<
   {
     __typename: t_String<"Mutation">;
-    ok: t_Boolean;
+    createBlog: FieldsTypeArg<{ blog: BlogCreate }, t_Blog>;
+    updateBlog?: FieldsTypeArg<{ blog: BlogUpdate }, t_Blog | null>;
   },
   Extension<"Mutation">
 >;
 
 /**
- * @name Boolean
- * @type SCALAR
+ * @name BlogCreate
+ * @type INPUT_OBJECT
  */
-type t_Boolean<T extends boolean = boolean> = ScalarType<
-  T,
-  Extension<"Boolean">
->;
+export type BlogCreate = {
+  title: string;
+  lead?: string | null;
+  content: string;
+  urlSlug: string;
+};
+
+/**
+ * @name BlogUpdate
+ * @type INPUT_OBJECT
+ */
+export type BlogUpdate = {
+  _id: any;
+  title: string;
+  lead?: string | null;
+  content: string;
+  urlSlug: string;
+};
 
 /**
  * @name __Schema
@@ -156,6 +195,15 @@ type t___TypeKind = EnumType<
   | "INPUT_OBJECT"
   | "LIST"
   | "NON_NULL"
+>;
+
+/**
+ * @name Boolean
+ * @type SCALAR
+ */
+type t_Boolean<T extends boolean = boolean> = ScalarType<
+  T,
+  Extension<"Boolean">
 >;
 
 /**
@@ -257,16 +305,16 @@ type t___DirectiveLocation = EnumType<
 export type Query = TypeData<t_Query>;
 
 /**
- * @name Blog
- * @type OBJECT
- */
-export type Blog = TypeData<t_Blog>;
-
-/**
  * @name ObjectId
  * @type SCALAR
  */
 export type ObjectId = TypeData<t_ObjectId>;
+
+/**
+ * @name Blog
+ * @type OBJECT
+ */
+export type Blog = TypeData<t_Blog>;
 
 /**
  * @name String
@@ -281,16 +329,16 @@ export type String = TypeData<t_String>;
 export type DateTime = TypeData<t_DateTime>;
 
 /**
+ * @name Int
+ * @type SCALAR
+ */
+export type Int = TypeData<t_Int>;
+
+/**
  * @name Mutation
  * @type OBJECT
  */
 export type Mutation = TypeData<t_Mutation>;
-
-/**
- * @name Boolean
- * @type SCALAR
- */
-export type Boolean = TypeData<t_Boolean>;
 
 /**
  * @name __Schema
@@ -318,6 +366,12 @@ export enum __TypeKind {
   LIST = "LIST",
   NON_NULL = "NON_NULL",
 }
+
+/**
+ * @name Boolean
+ * @type SCALAR
+ */
+export type Boolean = TypeData<t_Boolean>;
 
 /**
  * @name __Field
