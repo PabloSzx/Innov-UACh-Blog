@@ -3,7 +3,7 @@ import slugify from "slugify";
 import { mutationType } from "@nexus/schema";
 
 import { BlogModel } from "../models";
-import { ADMIN_TOKEN, UNAUTHORIZED_ERROR } from "../../constants";
+import { UNAUTHORIZED_ERROR } from "../../constants";
 
 export const Mutation = mutationType({
   definition(t) {

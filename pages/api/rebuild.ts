@@ -1,24 +1,27 @@
 import { NextApiHandler } from "next";
+import { REBUILD_HOOK_URL, ADMIN_TOKEN } from "../../constants/tokens";
 
 const RebuildNext: NextApiHandler = (req, res) => {
-  const rebuildHookUrl = process.env.REBUILD_HOOK_URL;
-  if (!rebuildHookUrl) {
+  if (!REBUILD_HOOK_URL) {
     res.end("No rebuild hook available");
     return;
   }
 
-  const secretToken = process.env.SECRET_TOKEN;
-
   const userAuthorizationToken = req.query.secret || req.headers.authorization;
 
-  if (!secretToken || userAuthorizationToken !== secretToken) {
+  if (!ADMIN_TOKEN) {
+    res.end("No ADMIN_TOKEN specified!");
+    return;
+  }
+
+  if (userAuthorizationToken !== ADMIN_TOKEN) {
     res.status(403);
     res.end("Unauthorized");
     return;
   }
 
   res.writeHead(307, {
-    Location: rebuildHookUrl,
+    Location: REBUILD_HOOK_URL,
   });
   res.end();
 };

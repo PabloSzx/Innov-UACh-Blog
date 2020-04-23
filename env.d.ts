@@ -4,5 +4,6 @@ declare namespace NodeJS {
     SECRET_TOKEN: string;
     PREVIEW_TOKEN: string;
     ADMIN_TOKEN: string;
+    REBUILD_HOOK_URL: string;
   }
 }

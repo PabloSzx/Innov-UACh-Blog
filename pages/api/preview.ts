@@ -1,11 +1,16 @@
 import { NextApiHandler } from "next";
 
-const PreviewRoute: NextApiHandler = (req, res) => {
-  const secretToken = process.env.PREVIEW_TOKEN;
+import { PREVIEW_TOKEN } from "../../constants/tokens";
 
+const PreviewRoute: NextApiHandler = (req, res) => {
   const userAuthorizationToken = req.query.secret || req.headers.authorization;
 
-  if (!secretToken || userAuthorizationToken !== secretToken) {
+  if (!PREVIEW_TOKEN) {
+    res.end("No PREVIEW_TOKEN specified!");
+    return;
+  }
+
+  if (userAuthorizationToken !== PREVIEW_TOKEN) {
     res.status(403);
     res.end("Unauthorized");
     return;
