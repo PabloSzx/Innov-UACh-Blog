@@ -17,6 +17,7 @@ const BlogSchema = createSchema(
       required: true,
     }),
     urlSlug: Type.string({
+      unique: true,
       required: true,
     }),
   },

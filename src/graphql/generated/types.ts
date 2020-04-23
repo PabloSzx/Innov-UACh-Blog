@@ -18,12 +18,18 @@ type Extension<TName extends string> = TName extends keyof typeof extensions
 type t_Query = FieldsType<
   {
     __typename: t_String<"Query">;
-    blog?: FieldsTypeArg<{ id: any }, t_Blog | null>;
+    currentUser: t_Boolean;
+    slugUrls: t_String[];
+    blog?: FieldsTypeArg<
+      { slug?: string | null; _id?: any | null },
+      t_Blog | null
+    >;
     blogList: FieldsTypeArg<
       {
         skip?: number | null;
         limit?: number | null;
         filter?: BlogFilter | null;
+        sort?: BlogSortValue[] | null;
       },
       t_Blog[]
     >;
@@ -31,6 +37,21 @@ type t_Query = FieldsType<
   },
   Extension<"Query">
 >;
+
+/**
+ * @name Boolean
+ * @type SCALAR
+ */
+type t_Boolean<T extends boolean = boolean> = ScalarType<
+  T,
+  Extension<"Boolean">
+>;
+
+/**
+ * @name String
+ * @type SCALAR
+ */
+type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
 
 /**
  * @name ObjectId
@@ -57,12 +78,6 @@ type t_Blog = FieldsType<
 >;
 
 /**
- * @name String
- * @type SCALAR
- */
-type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
-
-/**
  * @name DateTime
  * @type SCALAR
  */
@@ -85,12 +100,34 @@ export type BlogFilter = {
 };
 
 /**
+ * @name BlogSortValue
+ * @type INPUT_OBJECT
+ */
+export type BlogSortValue = { field: BlogSortField; direction: SortDirection };
+
+/**
+ * @name BlogSortField
+ * @type ENUM
+ */
+type t_BlogSortField = EnumType<
+  "createdAt" | "updatedAt" | "title" | "urlSlug"
+>;
+
+/**
+ * @name SortDirection
+ * @type ENUM
+ */
+type t_SortDirection = EnumType<"ASC" | "DESC">;
+
+/**
  * @name Mutation
  * @type OBJECT
  */
 type t_Mutation = FieldsType<
   {
     __typename: t_String<"Mutation">;
+    logout: t_Boolean;
+    login: FieldsTypeArg<{ token: string }, t_Boolean>;
     createBlog: FieldsTypeArg<{ blog: BlogCreate }, t_Blog>;
     updateBlog?: FieldsTypeArg<{ blog: BlogUpdate }, t_Blog | null>;
   },
@@ -198,15 +235,6 @@ type t___TypeKind = EnumType<
 >;
 
 /**
- * @name Boolean
- * @type SCALAR
- */
-type t_Boolean<T extends boolean = boolean> = ScalarType<
-  T,
-  Extension<"Boolean">
->;
-
-/**
  * @name __Field
  * @type OBJECT
  */
@@ -305,6 +333,18 @@ type t___DirectiveLocation = EnumType<
 export type Query = TypeData<t_Query>;
 
 /**
+ * @name Boolean
+ * @type SCALAR
+ */
+export type Boolean = TypeData<t_Boolean>;
+
+/**
+ * @name String
+ * @type SCALAR
+ */
+export type String = TypeData<t_String>;
+
+/**
  * @name ObjectId
  * @type SCALAR
  */
@@ -317,12 +357,6 @@ export type ObjectId = TypeData<t_ObjectId>;
 export type Blog = TypeData<t_Blog>;
 
 /**
- * @name String
- * @type SCALAR
- */
-export type String = TypeData<t_String>;
-
-/**
  * @name DateTime
  * @type SCALAR
  */
@@ -333,6 +367,26 @@ export type DateTime = TypeData<t_DateTime>;
  * @type SCALAR
  */
 export type Int = TypeData<t_Int>;
+
+/**
+ * @name BlogSortField
+ * @type ENUM
+ */
+export enum BlogSortField {
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+  title = "title",
+  urlSlug = "urlSlug",
+}
+
+/**
+ * @name SortDirection
+ * @type ENUM
+ */
+export enum SortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 
 /**
  * @name Mutation
@@ -366,12 +420,6 @@ export enum __TypeKind {
   LIST = "LIST",
   NON_NULL = "NON_NULL",
 }
-
-/**
- * @name Boolean
- * @type SCALAR
- */
-export type Boolean = TypeData<t_Boolean>;
 
 /**
  * @name __Field

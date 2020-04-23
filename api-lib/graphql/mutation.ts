@@ -3,15 +3,36 @@ import slugify from "slugify";
 import { mutationType } from "@nexus/schema";
 
 import { BlogModel } from "../models";
+import { ADMIN_TOKEN, UNAUTHORIZED_ERROR } from "../../constants";
 
 export const Mutation = mutationType({
   definition(t) {
+    t.boolean("logout", {
+      resolve(_root, _args, { isAdmin, logout }) {
+        logout();
+
+        return isAdmin();
+      },
+    });
+    t.boolean("login", {
+      args: {
+        token: "String",
+      },
+      resolve(_root, { token }, { loginOrRefresh, checkToken }) {
+        const isValid = checkToken(token);
+        if (isValid) loginOrRefresh();
+
+        return isValid;
+      },
+    });
     t.field("createBlog", {
       type: "Blog",
       args: {
         blog: "BlogCreate",
       },
-      async resolve(_root, { blog: { urlSlug, ...blog } }) {
+      async resolve(_root, { blog: { urlSlug, ...blog } }, { isAdmin }) {
+        if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
+
         return await BlogModel.create({
           urlSlug: slugify(urlSlug, {
             strict: true,
@@ -26,7 +47,13 @@ export const Mutation = mutationType({
       args: {
         blog: "BlogUpdate",
       },
-      async resolve(_root, { blog: { _id, lead, urlSlug, ...blog } }) {
+      async resolve(
+        _root,
+        { blog: { _id, lead, urlSlug, ...blog } },
+        { isAdmin }
+      ) {
+        if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
+
         return await BlogModel.findByIdAndUpdate(
           _id,
           {

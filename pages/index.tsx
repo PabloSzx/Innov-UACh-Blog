@@ -11,6 +11,8 @@ type BlogProps = {
     title: Blog["title"];
     content: Blog["content"];
     urlSlug: Blog["urlSlug"];
+    updatedAt: Blog["updatedAt"];
+    createdAt: Blog["updatedAt"];
   }[];
   dateNow: Query["dateNow"];
 };
@@ -22,6 +24,8 @@ const BlogListGql: DocumentNode<BlogProps, never> = gql`
       title
       content
       urlSlug
+      updatedAt
+      createdAt
     }
     dateNow
   }
@@ -36,7 +40,7 @@ export const getStaticProps: GetStaticProps<BlogProps> = async (ctx) => {
 };
 
 const IndexPage: NextPage<BlogProps> = (props) => {
-  return <div>{JSON.stringify(props.blogList)}</div>;
+  return <div>{JSON.stringify(props.blogList, null, 4)}</div>;
 };
 
 export default IndexPage;

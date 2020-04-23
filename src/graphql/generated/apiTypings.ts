@@ -48,6 +48,11 @@ export interface NexusGenInputs {
     minDate?: Date | null; // DateTime
     urlSlug?: string | null; // String
   };
+  BlogSortValue: {
+    // input type
+    direction: NexusGenEnums["SortDirection"]; // SortDirection!
+    field: NexusGenEnums["BlogSortField"]; // BlogSortField!
+  };
   BlogUpdate: {
     // input type
     _id: ObjectId; // ObjectId!
@@ -58,7 +63,10 @@ export interface NexusGenInputs {
   };
 }
 
-export interface NexusGenEnums {}
+export interface NexusGenEnums {
+  BlogSortField: "createdAt" | "title" | "updatedAt" | "urlSlug";
+  SortDirection: "ASC" | "DESC";
+}
 
 export interface NexusGenRootTypes {
   Blog: {
@@ -85,7 +93,10 @@ export interface NexusGenRootTypes {
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BlogCreate: NexusGenInputs["BlogCreate"];
   BlogFilter: NexusGenInputs["BlogFilter"];
+  BlogSortValue: NexusGenInputs["BlogSortValue"];
   BlogUpdate: NexusGenInputs["BlogUpdate"];
+  BlogSortField: NexusGenEnums["BlogSortField"];
+  SortDirection: NexusGenEnums["SortDirection"];
 }
 
 export interface NexusGenFieldTypes {
@@ -102,13 +113,17 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     createBlog: NexusGenRootTypes["Blog"]; // Blog!
+    login: boolean; // Boolean!
+    logout: boolean; // Boolean!
     updateBlog: NexusGenRootTypes["Blog"] | null; // Blog
   };
   Query: {
     // field return type
     blog: NexusGenRootTypes["Blog"] | null; // Blog
     blogList: NexusGenRootTypes["Blog"][]; // [Blog!]!
+    currentUser: boolean; // Boolean!
     dateNow: Date; // DateTime!
+    slugUrls: string[]; // [String!]!
   };
 }
 
@@ -118,6 +133,10 @@ export interface NexusGenArgTypes {
       // args
       blog: NexusGenInputs["BlogCreate"]; // BlogCreate!
     };
+    login: {
+      // args
+      token: string; // String!
+    };
     updateBlog: {
       // args
       blog: NexusGenInputs["BlogUpdate"]; // BlogUpdate!
@@ -126,13 +145,15 @@ export interface NexusGenArgTypes {
   Query: {
     blog: {
       // args
-      id: ObjectId; // ObjectId!
+      _id?: ObjectId | null; // ObjectId
+      slug?: string | null; // String
     };
     blogList: {
       // args
       filter?: NexusGenInputs["BlogFilter"] | null; // BlogFilter
       limit?: number | null; // Int
       skip?: number | null; // Int
+      sort?: NexusGenInputs["BlogSortValue"][] | null; // [BlogSortValue!]
     };
   };
 }
@@ -143,9 +164,13 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "Blog" | "Mutation" | "Query";
 
-export type NexusGenInputNames = "BlogCreate" | "BlogFilter" | "BlogUpdate";
+export type NexusGenInputNames =
+  | "BlogCreate"
+  | "BlogFilter"
+  | "BlogSortValue"
+  | "BlogUpdate";
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = "BlogSortField" | "SortDirection";
 
 export type NexusGenInterfaceNames = never;
 

@@ -24,6 +24,18 @@ input BlogFilter {
   urlSlug: String
 }
 
+enum BlogSortField {
+  createdAt
+  title
+  updatedAt
+  urlSlug
+}
+
+input BlogSortValue {
+  direction: SortDirection!
+  field: BlogSortField!
+}
+
 input BlogUpdate {
   _id: ObjectId!
   content: String!
@@ -41,6 +53,8 @@ scalar DateTime
 
 type Mutation {
   createBlog(blog: BlogCreate!): Blog!
+  login(token: String!): Boolean!
+  logout: Boolean!
   updateBlog(blog: BlogUpdate!): Blog
 }
 
@@ -50,7 +64,19 @@ Mongo object id scalar type
 scalar ObjectId
 
 type Query {
-  blog(id: ObjectId!): Blog
-  blogList(filter: BlogFilter, limit: Int, skip: Int): [Blog!]!
+  blog(_id: ObjectId, slug: String): Blog
+  blogList(
+    filter: BlogFilter
+    limit: Int
+    skip: Int
+    sort: [BlogSortValue!]
+  ): [Blog!]!
+  currentUser: Boolean!
   dateNow: DateTime!
+  slugUrls: [String!]!
+}
+
+enum SortDirection {
+  ASC
+  DESC
 }

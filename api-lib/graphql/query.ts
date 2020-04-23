@@ -1,19 +1,52 @@
 import { MongooseFilterQuery } from "mongoose";
+import slugify from "slugify";
 
-import { arg, queryType } from "@nexus/schema";
+import { arg, queryType, stringArg } from "@nexus/schema";
 
 import { BlogModel, BlogProps } from "../models";
 
 export const Query = queryType({
   definition(t) {
+    t.boolean("currentUser", {
+      resolve(_root, _args, { isAdmin, loginOrRefresh }) {
+        const wasAdmin = isAdmin();
+        if (wasAdmin) loginOrRefresh();
+
+        return wasAdmin;
+      },
+    });
+    t.list.string("slugUrls", {
+      async resolve() {
+        return (await BlogModel.find({}, "urlSlug")).map(
+          ({ urlSlug }) => urlSlug
+        );
+      },
+    });
     t.field("blog", {
       args: {
-        id: "ObjectId",
+        slug: stringArg({
+          nullable: true,
+        }),
+        _id: arg({
+          type: "ObjectId",
+          nullable: true,
+        }),
       },
       nullable: true,
       type: "Blog",
-      async resolve(_root, { id }) {
-        return BlogModel.findById(id);
+      resolve(_root, { slug, _id }) {
+        if (_id) {
+          return BlogModel.findById(_id);
+        }
+        if (slug) {
+          return BlogModel.findOne({
+            urlSlug: slugify(slug, {
+              strict: true,
+            }),
+          });
+        }
+
+        return null;
       },
     });
     t.field("blogList", {
@@ -30,13 +63,21 @@ export const Query = queryType({
           type: "BlogFilter",
           nullable: true,
         }),
+        sort: arg({
+          type: "BlogSortValue",
+          list: true,
+          nullable: true,
+        }),
       },
       type: "Blog",
       list: true,
-      async resolve(_root, { limit, skip, filter }) {
+      resolve(_root, { limit, skip, filter, sort }) {
         limit = limit ?? 5;
         skip = skip ?? 0;
         if (limit <= 0) return [];
+
+        if (limit > 50) limit = 50;
+        if (skip < 0) skip = 0;
 
         return BlogModel.find(
           (() => {
@@ -69,6 +110,22 @@ export const Query = queryType({
             return queryFilter;
           })()
         )
+          .sort(
+            (() => {
+              if (!sort?.length) {
+                return {
+                  updatedAt: "DESC",
+                };
+              }
+
+              return sort.reduce<
+                { [P in keyof BlogProps]?: typeof sort[number]["direction"] }
+              >((acum, { field, direction }) => {
+                acum[field] = direction;
+                return acum;
+              }, {});
+            })()
+          )
           .limit(limit)
           .skip(skip);
       },

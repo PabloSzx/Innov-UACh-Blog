@@ -17,17 +17,27 @@ export const schema = {
   get Query() {
     return new ObjectNode(
       {
+        get currentUser() {
+          return new FieldNode(schema.Boolean, undefined, false);
+        },
+        get slugUrls() {
+          return new FieldNode(
+            new ArrayNode(schema.String, false),
+            undefined,
+            false
+          );
+        },
         get blog() {
           return new FieldNode(
             schema.Blog,
-            new Arguments(
-              {
-                get id() {
-                  return new ArgumentsField(schema.ObjectId, false);
-                },
+            new Arguments({
+              get slug() {
+                return new ArgumentsField(schema.String, true);
               },
-              true
-            ),
+              get _id() {
+                return new ArgumentsField(schema.ObjectId, true);
+              },
+            }),
             true
           );
         },
@@ -44,6 +54,12 @@ export const schema = {
               get filter() {
                 return new ArgumentsField(schema.BlogFilter, true);
               },
+              get sort() {
+                return new ArgumentsField(
+                  new ArrayNode(schema.BlogSortValue, true),
+                  true
+                );
+              },
             }),
             false
           );
@@ -54,6 +70,18 @@ export const schema = {
       },
       { name: "Query", extension: ((extensions as any) || {}).Query }
     );
+  },
+  get Boolean() {
+    return new ScalarNode({
+      name: "Boolean",
+      extension: ((extensions as any) || {}).Boolean,
+    });
+  },
+  get String() {
+    return new ScalarNode({
+      name: "String",
+      extension: ((extensions as any) || {}).String,
+    });
   },
   get ObjectId() {
     return new ScalarNode({
@@ -89,12 +117,6 @@ export const schema = {
       { name: "Blog", extension: ((extensions as any) || {}).Blog }
     );
   },
-  get String() {
-    return new ScalarNode({
-      name: "String",
-      extension: ((extensions as any) || {}).String,
-    });
-  },
   get DateTime() {
     return new ScalarNode({
       name: "DateTime",
@@ -123,9 +145,45 @@ export const schema = {
       { name: "BlogFilter" }
     );
   },
+  get BlogSortValue() {
+    return new InputNode(
+      {
+        get field() {
+          return new InputNodeField(schema.BlogSortField, false);
+        },
+        get direction() {
+          return new InputNodeField(schema.SortDirection, false);
+        },
+      },
+      { name: "BlogSortValue" }
+    );
+  },
+  get BlogSortField() {
+    return new EnumNode({ name: "BlogSortField" });
+  },
+  get SortDirection() {
+    return new EnumNode({ name: "SortDirection" });
+  },
   get Mutation() {
     return new ObjectNode(
       {
+        get logout() {
+          return new FieldNode(schema.Boolean, undefined, false);
+        },
+        get login() {
+          return new FieldNode(
+            schema.Boolean,
+            new Arguments(
+              {
+                get token() {
+                  return new ArgumentsField(schema.String, false);
+                },
+              },
+              true
+            ),
+            false
+          );
+        },
         get createBlog() {
           return new FieldNode(
             schema.Blog,
@@ -293,12 +351,6 @@ export const schema = {
   },
   get __TypeKind() {
     return new EnumNode({ name: "__TypeKind" });
-  },
-  get Boolean() {
-    return new ScalarNode({
-      name: "Boolean",
-      extension: ((extensions as any) || {}).Boolean,
-    });
   },
   get __Field() {
     return new ObjectNode(
