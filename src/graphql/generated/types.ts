@@ -26,12 +26,11 @@ type t_Query = FieldsType<
     >;
     blogList: FieldsTypeArg<
       {
-        skip?: number | null;
-        limit?: number | null;
+        pagination?: PaginationArgs | null;
         filter?: BlogFilter | null;
         sort?: BlogSortValue[] | null;
       },
-      t_Blog[]
+      t_BlogNodes
     >;
     dateNow: t_DateTime;
   },
@@ -84,10 +83,28 @@ type t_Blog = FieldsType<
 type t_DateTime<T extends any = any> = ScalarType<T, Extension<"DateTime">>;
 
 /**
- * @name Int
+ * @name PaginationArgs
+ * @type INPUT_OBJECT
+ */
+export type PaginationArgs = { skip?: any | null; limit?: any | null };
+
+/**
+ * @name NonNegativeInt
  * @type SCALAR
  */
-type t_Int<T extends number = number> = ScalarType<T, Extension<"Int">>;
+type t_NonNegativeInt<T extends any = any> = ScalarType<
+  T,
+  Extension<"NonNegativeInt">
+>;
+
+/**
+ * @name PositiveInt
+ * @type SCALAR
+ */
+type t_PositiveInt<T extends any = any> = ScalarType<
+  T,
+  Extension<"PositiveInt">
+>;
 
 /**
  * @name BlogFilter
@@ -118,6 +135,45 @@ type t_BlogSortField = EnumType<
  * @type ENUM
  */
 type t_SortDirection = EnumType<"ASC" | "DESC">;
+
+/**
+ * @name BlogNodes
+ * @type OBJECT
+ */
+type t_BlogNodes = FieldsType<
+  {
+    __typename: t_String<"BlogNodes">;
+    pageInfo: t_PageInfo;
+    nodes: t_Blog[];
+  },
+  Extension<"BlogNodes">
+>;
+
+/**
+ * @name PageInfo
+ * @type OBJECT
+ */
+type t_PageInfo = FieldsType<
+  {
+    __typename: t_String<"PageInfo">;
+
+    /**
+     * Total amount of the current page
+     */
+    pageCount: t_NonNegativeInt;
+
+    /**
+     * Total amount of documents based on the filter
+     */
+    totalCount: t_NonNegativeInt;
+
+    /**
+     * Total amount of pages based on the filter and limit
+     */
+    totalPages: t_NonNegativeInt;
+  },
+  Extension<"PageInfo">
+>;
 
 /**
  * @name Mutation
@@ -363,10 +419,16 @@ export type Blog = TypeData<t_Blog>;
 export type DateTime = TypeData<t_DateTime>;
 
 /**
- * @name Int
+ * @name NonNegativeInt
  * @type SCALAR
  */
-export type Int = TypeData<t_Int>;
+export type NonNegativeInt = TypeData<t_NonNegativeInt>;
+
+/**
+ * @name PositiveInt
+ * @type SCALAR
+ */
+export type PositiveInt = TypeData<t_PositiveInt>;
 
 /**
  * @name BlogSortField
@@ -387,6 +449,18 @@ export enum SortDirection {
   ASC = "ASC",
   DESC = "DESC",
 }
+
+/**
+ * @name BlogNodes
+ * @type OBJECT
+ */
+export type BlogNodes = TypeData<t_BlogNodes>;
+
+/**
+ * @name PageInfo
+ * @type OBJECT
+ */
+export type PageInfo = TypeData<t_PageInfo>;
 
 /**
  * @name Mutation

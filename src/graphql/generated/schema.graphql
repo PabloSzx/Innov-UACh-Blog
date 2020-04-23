@@ -24,6 +24,11 @@ input BlogFilter {
   urlSlug: String
 }
 
+type BlogNodes {
+  nodes: [Blog!]!
+  pageInfo: PageInfo!
+}
+
 enum BlogSortField {
   createdAt
   title
@@ -59,18 +64,56 @@ type Mutation {
 }
 
 """
+Integers that will have a value of 0 or more.
+"""
+scalar NonNegativeInt
+
+"""
 Mongo object id scalar type
 """
 scalar ObjectId
+
+type PageInfo {
+  """
+  Total amount of the current page
+  """
+  pageCount: NonNegativeInt!
+
+  """
+  Total amount of documents based on the filter
+  """
+  totalCount: NonNegativeInt!
+
+  """
+  Total amount of pages based on the filter and limit
+  """
+  totalPages: NonNegativeInt!
+}
+
+input PaginationArgs {
+  """
+  Limit of documents on the page, the maximum is 50
+  """
+  limit: PositiveInt = 5
+
+  """
+  Amount of documents to skip for the current page
+  """
+  skip: NonNegativeInt = 0
+}
+
+"""
+Integers that will have a value greater than 0.
+"""
+scalar PositiveInt
 
 type Query {
   blog(_id: ObjectId, slug: String): Blog
   blogList(
     filter: BlogFilter
-    limit: Int
-    skip: Int
-    sort: [BlogSortValue!]
-  ): [Blog!]!
+    pagination: PaginationArgs = { limit: 5, skip: 0 }
+    sort: [BlogSortValue!] = { direction: DESC, field: createdAt }
+  ): BlogNodes!
   currentUser: Boolean!
   dateNow: DateTime!
   slugUrls: [String!]!

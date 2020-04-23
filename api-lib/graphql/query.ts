@@ -1,4 +1,5 @@
 import { MongooseFilterQuery } from "mongoose";
+import PLazy from "p-lazy";
 import slugify from "slugify";
 
 import { arg, queryType, stringArg } from "@nexus/schema";
@@ -51,13 +52,13 @@ export const Query = queryType({
     });
     t.field("blogList", {
       args: {
-        skip: arg({
-          type: "Int",
+        pagination: arg({
+          type: "PaginationArgs",
           nullable: true,
-        }),
-        limit: arg({
-          type: "Int",
-          nullable: true,
+          default: {
+            limit: 5,
+            skip: 0,
+          },
         }),
         filter: arg({
           type: "BlogFilter",
@@ -67,67 +68,92 @@ export const Query = queryType({
           type: "BlogSortValue",
           list: true,
           nullable: true,
+          default: {
+            field: "createdAt",
+            direction: "DESC",
+          },
         }),
       },
-      type: "Blog",
-      list: true,
-      resolve(_root, { limit, skip, filter, sort }) {
-        limit = limit ?? 5;
-        skip = skip ?? 0;
-        if (limit <= 0) return [];
+      type: "BlogNodes",
+      resolve(_root, { pagination, filter, sort }, _ctx, info) {
+        let limit = pagination?.limit ?? 5;
+        let skip = pagination?.skip ?? 0;
 
         if (limit > 50) limit = 50;
-        if (skip < 0) skip = 0;
 
-        return BlogModel.find(
-          (() => {
-            const queryFilter: MongooseFilterQuery<BlogProps> = {};
-            if (!filter) return queryFilter;
+        const queryFilter = (() => {
+          const queryFilter: MongooseFilterQuery<BlogProps> = {};
 
-            const { minDate, maxDate, urlSlug } = filter;
+          if (!filter) return queryFilter;
 
-            if (urlSlug) {
-              queryFilter.$text = {
-                $search: urlSlug,
-                $caseSensitive: false,
-              };
-            }
-            if (minDate && maxDate) {
-              queryFilter.createdAt = {
-                $lte: maxDate,
-                $gte: minDate,
-              };
-            } else if (minDate) {
-              queryFilter.createdAt = {
-                $gte: minDate,
-              };
-            } else if (maxDate) {
-              queryFilter.createdAt = {
-                $lte: maxDate,
-              };
-            }
+          const { minDate, maxDate, urlSlug } = filter;
 
-            return queryFilter;
-          })()
-        )
-          .sort(
-            (() => {
-              if (!sort?.length) {
-                return {
-                  updatedAt: "DESC",
-                };
-              }
+          if (urlSlug) {
+            queryFilter.$text = {
+              $search: urlSlug,
+              $caseSensitive: false,
+            };
+          }
+          if (minDate && maxDate) {
+            queryFilter.createdAt = {
+              $lte: maxDate,
+              $gte: minDate,
+            };
+          } else if (minDate) {
+            queryFilter.createdAt = {
+              $gte: minDate,
+            };
+          } else if (maxDate) {
+            queryFilter.createdAt = {
+              $lte: maxDate,
+            };
+          }
 
-              return sort.reduce<
-                { [P in keyof BlogProps]?: typeof sort[number]["direction"] }
-              >((acum, { field, direction }) => {
-                acum[field] = direction;
-                return acum;
-              }, {});
-            })()
-          )
+          return queryFilter;
+        })();
+
+        const sortQuery = (() => {
+          if (!sort?.length) {
+            return {
+              createdAt: "DESC",
+            };
+          }
+
+          return sort.reduce<
+            { [P in keyof BlogProps]?: typeof sort[number]["direction"] }
+          >((acum, { field, direction }) => {
+            acum[field] = direction;
+            return acum;
+          }, {});
+        })();
+
+        const nodes = BlogModel.find(queryFilter)
+          .sort(sortQuery)
           .limit(limit)
           .skip(skip);
+
+        const totalCount = BlogModel.countDocuments(queryFilter);
+
+        return {
+          pageInfo: {
+            pageCount: new PLazy((resolve, reject) => {
+              nodes
+                .then(({ length }) => {
+                  resolve(length);
+                })
+                .catch(reject);
+            }),
+            totalCount,
+            totalPages: new PLazy((resolve, reject) => {
+              totalCount
+                .then((n) => {
+                  resolve(Math.ceil(n / limit));
+                })
+                .catch(reject);
+            }),
+          },
+          nodes,
+        };
       },
     });
     t.dateTime("dateNow", {

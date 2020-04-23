@@ -43,13 +43,10 @@ export const schema = {
         },
         get blogList() {
           return new FieldNode(
-            new ArrayNode(schema.Blog, false),
+            schema.BlogNodes,
             new Arguments({
-              get skip() {
-                return new ArgumentsField(schema.Int, true);
-              },
-              get limit() {
-                return new ArgumentsField(schema.Int, true);
+              get pagination() {
+                return new ArgumentsField(schema.PaginationArgs, true);
               },
               get filter() {
                 return new ArgumentsField(schema.BlogFilter, true);
@@ -123,10 +120,29 @@ export const schema = {
       extension: ((extensions as any) || {}).DateTime,
     });
   },
-  get Int() {
+  get PaginationArgs() {
+    return new InputNode(
+      {
+        get skip() {
+          return new InputNodeField(schema.NonNegativeInt, true);
+        },
+        get limit() {
+          return new InputNodeField(schema.PositiveInt, true);
+        },
+      },
+      { name: "PaginationArgs" }
+    );
+  },
+  get NonNegativeInt() {
     return new ScalarNode({
-      name: "Int",
-      extension: ((extensions as any) || {}).Int,
+      name: "NonNegativeInt",
+      extension: ((extensions as any) || {}).NonNegativeInt,
+    });
+  },
+  get PositiveInt() {
+    return new ScalarNode({
+      name: "PositiveInt",
+      extension: ((extensions as any) || {}).PositiveInt,
     });
   },
   get BlogFilter() {
@@ -163,6 +179,39 @@ export const schema = {
   },
   get SortDirection() {
     return new EnumNode({ name: "SortDirection" });
+  },
+  get BlogNodes() {
+    return new ObjectNode(
+      {
+        get pageInfo() {
+          return new FieldNode(schema.PageInfo, undefined, false);
+        },
+        get nodes() {
+          return new FieldNode(
+            new ArrayNode(schema.Blog, false),
+            undefined,
+            false
+          );
+        },
+      },
+      { name: "BlogNodes", extension: ((extensions as any) || {}).BlogNodes }
+    );
+  },
+  get PageInfo() {
+    return new ObjectNode(
+      {
+        get pageCount() {
+          return new FieldNode(schema.NonNegativeInt, undefined, false);
+        },
+        get totalCount() {
+          return new FieldNode(schema.NonNegativeInt, undefined, false);
+        },
+        get totalPages() {
+          return new FieldNode(schema.NonNegativeInt, undefined, false);
+        },
+      },
+      { name: "PageInfo", extension: ((extensions as any) || {}).PageInfo }
+    );
   },
   get Mutation() {
     return new ObjectNode(

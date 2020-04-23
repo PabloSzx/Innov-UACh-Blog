@@ -1,5 +1,6 @@
 import { Kind } from "graphql";
 import { GraphQLDateTime } from "graphql-iso-date";
+import { NonNegativeIntResolver, PositiveIntResolver } from "graphql-scalars";
 import { ObjectId } from "mongodb";
 
 import { asNexusMethod, scalarType } from "@nexus/schema";
@@ -23,3 +24,8 @@ export const ObjectIdScalar = scalarType({
 });
 
 export const DateTime = asNexusMethod(GraphQLDateTime, "dateTime");
+export const NonNegativeInt = asNexusMethod(
+  NonNegativeIntResolver,
+  "nonNegativeInt"
+);
+export const PositiveInt = asNexusMethod(PositiveIntResolver, "positiveInt");

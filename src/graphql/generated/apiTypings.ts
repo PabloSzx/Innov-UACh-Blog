@@ -15,6 +15,18 @@ declare global {
         core.GetGen3<"inputTypes", TypeName, FieldName>
       >
     ): void; // "DateTime";
+    nonNegativeInt<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<
+        core.GetGen3<"inputTypes", TypeName, FieldName>
+      >
+    ): void; // "NonNegativeInt";
+    positiveInt<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<
+        core.GetGen3<"inputTypes", TypeName, FieldName>
+      >
+    ): void; // "PositiveInt";
   }
 }
 declare global {
@@ -27,6 +39,14 @@ declare global {
       fieldName: FieldName,
       ...opts: core.ScalarOutSpread<TypeName, FieldName>
     ): void; // "DateTime";
+    nonNegativeInt<FieldName extends string>(
+      fieldName: FieldName,
+      ...opts: core.ScalarOutSpread<TypeName, FieldName>
+    ): void; // "NonNegativeInt";
+    positiveInt<FieldName extends string>(
+      fieldName: FieldName,
+      ...opts: core.ScalarOutSpread<TypeName, FieldName>
+    ): void; // "PositiveInt";
   }
 }
 
@@ -61,6 +81,11 @@ export interface NexusGenInputs {
     title: string; // String!
     urlSlug: string; // String!
   };
+  PaginationArgs: {
+    // input type
+    limit?: number | null; // PositiveInt
+    skip?: number | null; // NonNegativeInt
+  };
 }
 
 export interface NexusGenEnums {
@@ -79,7 +104,18 @@ export interface NexusGenRootTypes {
     updatedAt: Date; // DateTime!
     urlSlug: string; // String!
   };
+  BlogNodes: {
+    // root type
+    nodes: NexusGenRootTypes["Blog"][]; // [Blog!]!
+    pageInfo: NexusGenRootTypes["PageInfo"]; // PageInfo!
+  };
   Mutation: {};
+  PageInfo: {
+    // root type
+    pageCount: number; // NonNegativeInt!
+    totalCount: number; // NonNegativeInt!
+    totalPages: number; // NonNegativeInt!
+  };
   Query: {};
   String: string;
   Int: number;
@@ -87,7 +123,9 @@ export interface NexusGenRootTypes {
   Boolean: boolean;
   ID: string;
   DateTime: Date;
+  NonNegativeInt: number;
   ObjectId: ObjectId;
+  PositiveInt: number;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -95,6 +133,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   BlogFilter: NexusGenInputs["BlogFilter"];
   BlogSortValue: NexusGenInputs["BlogSortValue"];
   BlogUpdate: NexusGenInputs["BlogUpdate"];
+  PaginationArgs: NexusGenInputs["PaginationArgs"];
   BlogSortField: NexusGenEnums["BlogSortField"];
   SortDirection: NexusGenEnums["SortDirection"];
 }
@@ -110,6 +149,11 @@ export interface NexusGenFieldTypes {
     updatedAt: Date; // DateTime!
     urlSlug: string; // String!
   };
+  BlogNodes: {
+    // field return type
+    nodes: NexusGenRootTypes["Blog"][]; // [Blog!]!
+    pageInfo: NexusGenRootTypes["PageInfo"]; // PageInfo!
+  };
   Mutation: {
     // field return type
     createBlog: NexusGenRootTypes["Blog"]; // Blog!
@@ -117,10 +161,16 @@ export interface NexusGenFieldTypes {
     logout: boolean; // Boolean!
     updateBlog: NexusGenRootTypes["Blog"] | null; // Blog
   };
+  PageInfo: {
+    // field return type
+    pageCount: number; // NonNegativeInt!
+    totalCount: number; // NonNegativeInt!
+    totalPages: number; // NonNegativeInt!
+  };
   Query: {
     // field return type
     blog: NexusGenRootTypes["Blog"] | null; // Blog
-    blogList: NexusGenRootTypes["Blog"][]; // [Blog!]!
+    blogList: NexusGenRootTypes["BlogNodes"]; // BlogNodes!
     currentUser: boolean; // Boolean!
     dateNow: Date; // DateTime!
     slugUrls: string[]; // [String!]!
@@ -151,8 +201,7 @@ export interface NexusGenArgTypes {
     blogList: {
       // args
       filter?: NexusGenInputs["BlogFilter"] | null; // BlogFilter
-      limit?: number | null; // Int
-      skip?: number | null; // Int
+      pagination?: NexusGenInputs["PaginationArgs"] | null; // PaginationArgs
       sort?: NexusGenInputs["BlogSortValue"][] | null; // [BlogSortValue!]
     };
   };
@@ -162,13 +211,19 @@ export interface NexusGenAbstractResolveReturnTypes {}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Blog" | "Mutation" | "Query";
+export type NexusGenObjectNames =
+  | "Blog"
+  | "BlogNodes"
+  | "Mutation"
+  | "PageInfo"
+  | "Query";
 
 export type NexusGenInputNames =
   | "BlogCreate"
   | "BlogFilter"
   | "BlogSortValue"
-  | "BlogUpdate";
+  | "BlogUpdate"
+  | "PaginationArgs";
 
 export type NexusGenEnumNames = "BlogSortField" | "SortDirection";
 
@@ -180,7 +235,9 @@ export type NexusGenScalarNames =
   | "Float"
   | "ID"
   | "Int"
+  | "NonNegativeInt"
   | "ObjectId"
+  | "PositiveInt"
   | "String";
 
 export type NexusGenUnionNames = never;

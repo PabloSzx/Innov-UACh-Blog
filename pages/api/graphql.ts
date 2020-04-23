@@ -3,9 +3,15 @@ import { sign, verify } from "jsonwebtoken";
 
 import { schema } from "../../api-lib/schema";
 import { IS_PRODUCTION, ONE_WEEK_SECONDS } from "../../constants";
+import GraphiQLHTML from "../../constants/graphiql.html";
 import { ADMIN_TOKEN, SECRET_TOKEN } from "../../constants/tokens";
 
-import type { PageConfig, NextApiRequest, NextApiResponse } from "next";
+import type {
+  PageConfig,
+  NextApiRequest,
+  NextApiResponse,
+  NextApiHandler,
+} from "next";
 
 const jwtPayload = { token: ADMIN_TOKEN };
 
@@ -103,24 +109,35 @@ declare global {
   }
 }
 
+const graphiql = false;
+
 const server = new ApolloServer({
   schema,
   introspection: !IS_PRODUCTION,
-  playground: IS_PRODUCTION
-    ? false
-    : {
-        settings: {
-          "request.credentials": "same-origin",
-          "editor.theme": "dark",
-        },
-      },
+  playground: !IS_PRODUCTION && {
+    settings: {
+      "request.credentials": "same-origin",
+      "editor.theme": "dark",
+    },
+  },
   tracing: !IS_PRODUCTION,
   context: buildContext,
 });
 
-export default server.createHandler({
+const apolloServerHandler = server.createHandler({
   path: "/api/graphql",
 });
+
+const apiHandler: NextApiHandler = (req, res) => {
+  if (!IS_PRODUCTION && req.method === "GET") {
+    res.setHeader("Content-Type", "text/html");
+    res.end(GraphiQLHTML);
+  } else {
+    return apolloServerHandler(req, res);
+  }
+};
+
+export default graphiql ? apiHandler : apolloServerHandler;
 
 export const config: PageConfig = {
   api: {

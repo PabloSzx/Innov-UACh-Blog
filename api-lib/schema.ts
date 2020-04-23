@@ -29,6 +29,8 @@ export const schema = makeSchema({
     backingTypeMap: {
       ObjectId: "ObjectId",
       DateTime: "Date",
+      NonNegativeInt: "number",
+      PositiveInt: "number",
     },
   },
   nonNullDefaults: {

@@ -7,25 +7,29 @@ import type { Query, Blog } from "../src/graphql/generated";
 
 type BlogProps = {
   blogList: {
-    _id: Blog["_id"];
-    title: Blog["title"];
-    content: Blog["content"];
-    urlSlug: Blog["urlSlug"];
-    updatedAt: Blog["updatedAt"];
-    createdAt: Blog["updatedAt"];
-  }[];
+    nodes: Array<{
+      _id: Blog["_id"];
+      title: Blog["title"];
+      content: Blog["content"];
+      urlSlug: Blog["urlSlug"];
+      updatedAt: Blog["updatedAt"];
+      createdAt: Blog["updatedAt"];
+    }>;
+  };
   dateNow: Query["dateNow"];
 };
 
 const BlogListGql: DocumentNode<BlogProps, never> = gql`
   query {
-    blogList(limit: 5, skip: 0) {
-      _id
-      title
-      content
-      urlSlug
-      updatedAt
-      createdAt
+    blogList(pagination: { limit: 5, skip: 0 }) {
+      nodes {
+        _id
+        title
+        content
+        urlSlug
+        updatedAt
+        createdAt
+      }
     }
     dateNow
   }
