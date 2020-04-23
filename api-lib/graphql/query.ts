@@ -1,10 +1,10 @@
 import { MongooseFilterQuery } from "mongoose";
-import PLazy from "p-lazy";
 import slugify from "slugify";
 
 import { arg, queryType, stringArg } from "@nexus/schema";
 
 import { BlogModel, BlogProps } from "../models";
+import { pageInfoResolver } from "../utils";
 
 export const Query = queryType({
   definition(t) {
@@ -75,7 +75,7 @@ export const Query = queryType({
         }),
       },
       type: "BlogNodes",
-      resolve(_root, { pagination, filter, sort }, _ctx, info) {
+      resolve(_root, { pagination, filter, sort }, _ctx) {
         let limit = pagination?.limit ?? 5;
         let skip = pagination?.skip ?? 0;
 
@@ -135,23 +135,12 @@ export const Query = queryType({
         const totalCount = BlogModel.countDocuments(queryFilter);
 
         return {
-          pageInfo: {
-            pageCount: new PLazy((resolve, reject) => {
-              nodes
-                .then(({ length }) => {
-                  resolve(length);
-                })
-                .catch(reject);
-            }),
+          pageInfo: pageInfoResolver({
+            nodes,
             totalCount,
-            totalPages: new PLazy((resolve, reject) => {
-              totalCount
-                .then((n) => {
-                  resolve(Math.ceil(n / limit));
-                })
-                .catch(reject);
-            }),
-          },
+            limit,
+            skip,
+          }),
           nodes,
         };
       },

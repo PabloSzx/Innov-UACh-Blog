@@ -112,6 +112,7 @@ export interface NexusGenRootTypes {
   Mutation: {};
   PageInfo: {
     // root type
+    hasNextPage: boolean; // Boolean!
     pageCount: number; // NonNegativeInt!
     totalCount: number; // NonNegativeInt!
     totalPages: number; // NonNegativeInt!
@@ -163,6 +164,7 @@ export interface NexusGenFieldTypes {
   };
   PageInfo: {
     // field return type
+    hasNextPage: boolean; // Boolean!
     pageCount: number; // NonNegativeInt!
     totalCount: number; // NonNegativeInt!
     totalPages: number; // NonNegativeInt!

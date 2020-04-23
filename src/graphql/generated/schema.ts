@@ -200,6 +200,9 @@ export const schema = {
   get PageInfo() {
     return new ObjectNode(
       {
+        get hasNextPage() {
+          return new FieldNode(schema.Boolean, undefined, false);
+        },
         get pageCount() {
           return new FieldNode(schema.NonNegativeInt, undefined, false);
         },

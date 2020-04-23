@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps<BlogProps> = async (ctx) => {
 };
 
 const IndexPage: NextPage<BlogProps> = (props) => {
-  return <div>{JSON.stringify(props.blogList, null, 4)}</div>;
+  return <div>{JSON.stringify(props, null, 4)}</div>;
 };
 
 export default IndexPage;

@@ -19,11 +19,15 @@ export const PaginationArgs = inputObjectType({
 export const PageInfo = objectType({
   name: "PageInfo",
   definition(t) {
+    t.boolean("hasNextPage", {
+      description:
+        "Helper to know if there is a next page based on filter, limit and skip",
+    });
     t.nonNegativeInt("pageCount", {
-      description: "Total amount of the current page",
+      description: "Total amount of documents in the current page",
     });
     t.nonNegativeInt("totalCount", {
-      description: "Total amount of documents based on the filter",
+      description: "Total amount of documents available based on the filter",
     });
     t.nonNegativeInt("totalPages", {
       description: "Total amount of pages based on the filter and limit",

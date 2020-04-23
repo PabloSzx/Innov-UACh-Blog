@@ -75,12 +75,17 @@ scalar ObjectId
 
 type PageInfo {
   """
-  Total amount of the current page
+  Helper to know if there is a next page based on filter, limit and skip
+  """
+  hasNextPage: Boolean!
+
+  """
+  Total amount of documents in the current page
   """
   pageCount: NonNegativeInt!
 
   """
-  Total amount of documents based on the filter
+  Total amount of documents available based on the filter
   """
   totalCount: NonNegativeInt!
 

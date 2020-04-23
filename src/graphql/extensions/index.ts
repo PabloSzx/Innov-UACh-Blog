@@ -1,7 +1,9 @@
 export const Query = {};
 
-export let DateTime: string;
-export let ObjectId: string;
+export declare const DateTime: string;
+export declare const ObjectId: string;
+export declare const PositiveInt: number;
+export declare const NonNegativeInt: number;
 
 /**
  * Add a key to a type

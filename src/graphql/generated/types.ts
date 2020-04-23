@@ -158,12 +158,17 @@ type t_PageInfo = FieldsType<
     __typename: t_String<"PageInfo">;
 
     /**
-     * Total amount of the current page
+     * Helper to know if there is a next page based on filter, limit and skip
+     */
+    hasNextPage: t_Boolean;
+
+    /**
+     * Total amount of documents in the current page
      */
     pageCount: t_NonNegativeInt;
 
     /**
-     * Total amount of documents based on the filter
+     * Total amount of documents available based on the filter
      */
     totalCount: t_NonNegativeInt;
 
