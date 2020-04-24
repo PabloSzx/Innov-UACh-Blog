@@ -1363,10 +1363,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongodb@^3.5.9":
-  version "3.5.9"
-  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.5.9.tgz#a14fda0d757e0430eebc171b3a9cedad118b1884"
-  integrity sha512-YEs/yBGkxpp9QxSB6gZInV7+S74pryqdfxEUJnlXDsFTtLmnDJA9iHnGEsxgrWm9gl2f4BDTwKe6lzTNB25oHg==
+"@types/mongodb@^3.5.10":
+  version "3.5.10"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.5.10.tgz#b54c143b5e641c5363848e227b17c2df7f144b15"
+  integrity sha512-6NkJNfFdFa/njBvN/9eAfq78bWUnapkdR3JbWGGpd7U71PjgKweA4Tlag8psi2mqm973vBYVTD1oc1u0lzRcig==
   dependencies:
     "@types/bson" "*"
     "@types/node" "*"
@@ -3804,10 +3804,10 @@ got@^10.6.0:
     to-readable-stream "^2.0.0"
     type-fest "^0.10.0"
 
-gqless-hooks@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gqless-hooks/-/gqless-hooks-1.0.1.tgz#965815e7ba3fea1cc6e15da4088034d706ace8b0"
-  integrity sha512-Ydi9LypjYbPYhVBJlBdLV2wy8Wwbj4cqhaFuv/xqi5VTStE7XG7q1fJcYzmYVeDnOQ2/gN8J+heRxjf451TKuw==
+gqless-hooks@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/gqless-hooks/-/gqless-hooks-1.0.3.tgz#b09edb5280e24e80f163cf2fb65e47e2cd459569"
+  integrity sha512-g0bGM7JV7YcrDos4cpsK3ny9O31p3I/fp9deqpM7Pxv6FBHnzfuujBh1J4Z5xc1ssFzzWupqDfGABUrDtSVvVA==
   dependencies:
     isomorphic-unfetch "^3.0.0"
 
