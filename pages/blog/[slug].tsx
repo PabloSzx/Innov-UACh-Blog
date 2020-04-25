@@ -1,31 +1,21 @@
 import { DocumentNode, gql } from "graphql-schema-query";
-import Maybe from "graphql/tsutils/Maybe";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
 import { executeFromSchema } from "../../api-lib/schema";
+import { BlogPost, BlogPostProps } from "../../src/components/BlogPost";
 
-import type { Blog, Query } from "../../src/graphql/generated";
-
-type BlogProps = {
-  blog: Maybe<{
-    _id: Blog["_id"];
-    title: Blog["title"];
-    content: Blog["content"];
-    updatedAt: Blog["updatedAt"];
-    createdAt: Blog["updatedAt"];
-  }>;
-};
+import type { Query } from "../../src/graphql/generated";
 
 const BlogGql: DocumentNode<
-  BlogProps,
+  BlogPostProps,
   {
     slug: string;
   }
 > = gql`
   query($slug: String!) {
     blog(slug: $slug) {
-      _id
       title
+      lead
       content
       updatedAt
       createdAt
@@ -44,7 +34,9 @@ const PathsGql: DocumentNode<
   }
 `;
 
-export const getStaticProps: GetStaticProps<BlogProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<BlogPostProps> = async ({
+  params,
+}) => {
   const slug = params?.slug;
 
   if (typeof slug !== "string") throw Error("Wrong slug param!");
@@ -69,8 +61,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const BlogPage: NextPage<BlogProps> = ({ blog }) => {
-  return <div>{JSON.stringify(blog, null, 2)}</div>;
+const BlogPage: NextPage<BlogPostProps> = ({ blog }) => {
+  if (!blog) return null;
+
+  return <BlogPost blog={blog} />;
 };
 
 export default BlogPage;

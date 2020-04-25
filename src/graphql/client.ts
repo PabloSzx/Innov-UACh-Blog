@@ -1,8 +1,11 @@
 import { Client, QueryFetcher } from "gqless";
 import { schema, Query, Mutation } from "./generated";
 import { createUseQuery, createUseMutation } from "gqless-hooks";
+import { IS_BROWSER } from "../../constants";
 
-const endpoint = "http://localhost:3000/api/graphql";
+const endpoint = IS_BROWSER
+  ? "/api/graphql"
+  : "https://innov-uach-blog.now.sh/api/graphql";
 
 const fetchQuery: QueryFetcher = async (query, variables) => {
   const response = await fetch(endpoint, {
