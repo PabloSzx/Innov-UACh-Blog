@@ -36,9 +36,15 @@ export const query = client.query;
 export const useQuery = createUseQuery<Query>({
   schema,
   endpoint,
+  creationHeaders: {
+    Accept: "application/json",
+  },
 });
 
 export const useMutation = createUseMutation<Mutation>({
   schema,
   endpoint,
+  creationHeaders: {
+    Accept: "application/json",
+  },
 });

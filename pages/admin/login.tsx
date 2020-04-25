@@ -9,21 +9,20 @@ import type { NextPage } from "next";
 
 const AdminLoginPage: NextPage = () => {
   const [message, setMessage] = useState("");
-  const [token, setToken] = useState("");
+  const [tokenState, setToken] = useState("");
 
   const { isCurrentUserLoading } = useAdminAuth({
     redirectOnSuccess: true,
   });
 
   const [login, { fetchState: loginState }] = useMutation(
-    ({ login }, { token }) => {
-      return login({
-        token,
-      });
+    ({ login }, args) => {
+      console.log(args);
+      return login(args);
     },
     {
       variables: {
-        token,
+        token: tokenState,
       },
       onCompleted(goodLogin, hooksPool) {
         if (goodLogin) {
@@ -51,15 +50,19 @@ const AdminLoginPage: NextPage = () => {
         marginTop="50px"
         type="password"
         onChange={onInputChange}
-        value={token}
+        value={tokenState}
         isDisabled={loginState === "loading"}
       />
 
       <Button
-        isDisabled={token.length < 20}
+        isDisabled={tokenState.length < 20}
         isLoading={loginState === "loading"}
         onClick={() => {
-          login();
+          login({
+            variables: {
+              token: tokenState,
+            },
+          });
           setToken("");
         }}
         variantColor="blue"

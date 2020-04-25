@@ -38,6 +38,12 @@ const buildContext = ({
   res: NextApiResponse;
 }) => {
   const checkToken = (token: string) => {
+    console.log({
+      ADMIN_TOKEN,
+      SECRET_TOKEN,
+      token,
+      noTokens,
+    });
     if (noTokens) return false;
 
     let ip =
@@ -45,9 +51,14 @@ const buildContext = ({
       req.headers["x-real-ip"] ||
       req.connection.remoteAddress;
 
+    console.log(token, "vs", ADMIN_TOKEN, {
+      ip,
+    });
+
     if (typeof ip !== "string") return false;
 
     if (blockedIps.has(ip)) {
+      console.log("Blocked IP", ip);
       return false;
     }
 
