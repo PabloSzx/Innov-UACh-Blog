@@ -20,7 +20,7 @@ type t_Query = FieldsType<
     __typename: t_String<"Query">;
     currentUser: t_Boolean;
     slugUrls: t_String[];
-    blog?: FieldsTypeArg<
+    blog: FieldsTypeArg<
       { slug?: string | null; _id?: any | null },
       t_Blog | null
     >;
@@ -190,7 +190,7 @@ type t_Mutation = FieldsType<
     logout: t_Boolean;
     login: FieldsTypeArg<{ token: string }, t_Boolean>;
     createBlog: FieldsTypeArg<{ blog: BlogCreate }, t_Blog>;
-    updateBlog?: FieldsTypeArg<{ blog: BlogUpdate }, t_Blog | null>;
+    updateBlog: FieldsTypeArg<{ blog: BlogUpdate }, t_Blog | null>;
   },
   Extension<"Mutation">
 >;

@@ -1,6 +1,13 @@
 import { ChangeEvent, useCallback, useState } from "react";
 
-import { Alert, AlertIcon, Button, Input, Stack } from "@chakra-ui/core";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Input,
+  Stack,
+  Spinner,
+} from "@chakra-ui/core";
 
 import { useMutation } from "../../src/graphql";
 import { useAdminAuth } from "../../src/hooks/adminAuth";
@@ -17,7 +24,6 @@ const AdminLoginPage: NextPage = () => {
 
   const [login, { fetchState: loginState }] = useMutation(
     ({ login }, args) => {
-      console.log(args);
       return login(args);
     },
     {
@@ -42,7 +48,7 @@ const AdminLoginPage: NextPage = () => {
     setToken(value);
   }, []);
 
-  if (isCurrentUserLoading) return null;
+  if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
   return (
     <Stack shouldWrapChildren alignItems="center">

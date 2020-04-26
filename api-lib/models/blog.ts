@@ -11,6 +11,7 @@ const BlogSchema = createSchema(
   {
     title: Type.string({
       required: true,
+      unique: true,
     }),
     lead: Type.string({}),
     content: Type.string({

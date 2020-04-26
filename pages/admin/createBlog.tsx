@@ -1,10 +1,9 @@
+import { Maybe, setCacheData } from "gqless-hooks";
 import { loremIpsum } from "lorem-ipsum";
-import ms from "ms";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import slugify from "slugify";
+import { FC, useCallback, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 
 import {
   Alert,
@@ -12,17 +11,15 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  Divider,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  Input,
   Stack,
-  Textarea,
+  Spinner,
 } from "@chakra-ui/core";
 
-import { BlogPost, BlogPostProps } from "../../src/components/BlogPost";
+import { AdminNavigation } from "../../src/components/AdminNavigation";
+import {
+  BlogEditCreatePostProps,
+  BlogPostForm,
+} from "../../src/components/BlogPostForm";
 import { BlogCreate, useMutation } from "../../src/graphql";
 import { useAdminAuth } from "../../src/hooks/adminAuth";
 
@@ -30,16 +27,14 @@ const CreateBlogPage: NextPage = () => {
   const { isCurrentUserLoading } = useAdminAuth({
     requireAdmin: true,
   });
-  const { register, handleSubmit, errors, watch, setValue } = useForm<
-    BlogCreate
-  >({
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    return {
       title: loremIpsum({
         count: 3,
         units: "words",
       }),
       lead: loremIpsum({
-        count: 10,
+        count: 5,
       }),
       content: loremIpsum({
         count: 40,
@@ -48,32 +43,19 @@ const CreateBlogPage: NextPage = () => {
         count: 2,
         units: "words",
       }),
-    },
-  });
-
-  const onSubmit = useCallback(
-    handleSubmit((data) => {
-      const { title, lead, content, urlSlug } = data;
-
-      createBlog({
-        variables: {
-          title,
-          lead,
-          content,
-          urlSlug,
-        },
-      });
-    }),
-    [handleSubmit]
-  );
+    };
+  }, []);
 
   const { push } = useRouter();
 
-  const [createBlog, { errors: createBlogErrors, fetchState }] = useMutation(
+  const [
+    createBlog,
+    { errors: createBlogErrors, fetchState: createFetchState },
+  ] = useMutation(
     (
       { createBlog },
       blogVariables: BlogCreate
-    ): gqlessHooksPool["blogsPaginated"]["data"][number] => {
+    ): gqlessSharedCache["blogsPaginated"]["nodes"][number] => {
       const blog = createBlog({
         blog: blogVariables,
       });
@@ -88,28 +70,63 @@ const CreateBlogPage: NextPage = () => {
       };
     },
     {
-      onCompleted(data, hooksPool) {
-        if (data?._id) {
-          hooksPool.blogsPaginated?.setData((prevData) => {
-            if (prevData) {
-              return [...prevData, data];
-            }
+      onCompleted(createdBlogData) {
+        if (createdBlogData == null) return;
 
-            return prevData;
-          });
+        setCacheData("blogsPaginated", (prevData) => {
+          if (!prevData) return null;
 
-          push("/blog/[slug]", `/blog/${data.urlSlug}`);
-        }
+          return {
+            hasNextPage: prevData.hasNextPage,
+            nodes: [createdBlogData, ...prevData.nodes],
+          };
+        });
+        setCacheData("edit_" + createdBlogData.urlSlug, createdBlogData);
+
+        push("/blog/[slug]", `/blog/${createdBlogData.urlSlug}`);
       },
     }
   );
 
-  const [previewState, setPreviewState] = useState<BlogPostProps["blog"]>();
+  const onCorrectSubmit = useCallback<
+    (data: BlogEditCreatePostProps) => Promise<Maybe<BlogEditCreatePostProps>>
+  >(
+    async (data) => {
+      let { title, lead, content, urlSlug } = data;
 
-  if (isCurrentUserLoading) return null;
+      return await createBlog({
+        variables: {
+          title,
+          lead,
+          content,
+          urlSlug,
+        },
+      });
+    },
+    [createBlog]
+  );
+
+  const isFetchLoading = createFetchState === "loading";
+
+  const SubmitButton = useCallback<FC>(() => {
+    return (
+      <Button
+        marginBottom="5px"
+        variantColor="blue"
+        type="submit"
+        isDisabled={isFetchLoading}
+        isLoading={isFetchLoading}
+      >
+        Create Blog
+      </Button>
+    );
+  }, [isFetchLoading]);
+
+  if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
   return (
-    <Stack>
+    <Stack margin="15px">
+      <AdminNavigation />
       <Stack alignSelf="center">
         {createBlogErrors &&
           createBlogErrors.map((error, key) => {
@@ -129,112 +146,11 @@ const CreateBlogPage: NextPage = () => {
           })}
       </Stack>
 
-      <form onSubmit={onSubmit}>
-        <Stack margin="20px">
-          <FormControl isInvalid={!!errors.title}>
-            <FormLabel>Title</FormLabel>
-            <Input
-              name="title"
-              ref={register({
-                required: "You have to specify a title",
-                minLength: {
-                  value: 3,
-                  message: "It should be at least 3 characters",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "It should be at most 50 characters",
-                },
-              })}
-            />
-            <FormHelperText>Blog Title</FormHelperText>
-            <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.lead}>
-            <FormLabel>Lead</FormLabel>
-            <Textarea height="100px" name="lead" ref={register} />
-            <FormHelperText>
-              Blog lead, it can be <b>Markdown</b> / <b>HTML</b> / <b>JSX</b>
-            </FormHelperText>
-            <FormErrorMessage>{errors.lead?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.content}>
-            <FormLabel>Content</FormLabel>
-            <Textarea
-              height="300px"
-              resize="vertical"
-              name="content"
-              ref={register({ required: "You have to specify the content" })}
-            />
-            <FormHelperText>
-              Blog Content, it can be <b>Markdown</b> / <b>HTML</b> / <b>JSX</b>
-            </FormHelperText>
-            <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.urlSlug}>
-            <FormLabel>URL Slug</FormLabel>
-            <Input
-              name="urlSlug"
-              ref={register({
-                required: "You have to specify an URL Slug",
-                minLength: {
-                  value: 3,
-                  message: "It has to be at least 3 characters",
-                },
-                maxLength: {
-                  value: 30,
-                  message: "It has to be at most 30 characters",
-                },
-              })}
-            />
-            <FormHelperText>
-              This is the path used to reference the blog, used in the URL.{" "}
-              <b>It has to be unique.</b>{" "}
-              <i>
-                It will automatically convert into an HTTP friendly string if
-                necessary
-              </i>
-            </FormHelperText>
-            <FormErrorMessage>{errors.urlSlug?.message}</FormErrorMessage>
-          </FormControl>
-
-          <Button
-            variantColor="blue"
-            type="submit"
-            isDisabled={fetchState === "loading"}
-            isLoading={fetchState === "loading"}
-            onClick={() => {
-              setValue("urlSlug", slugify(watch("urlSlug"), { strict: true }));
-            }}
-          >
-            Crear Blog
-          </Button>
-          <Button
-            variantColor="green"
-            type="button"
-            onClick={() => {
-              setValue("urlSlug", slugify(watch("urlSlug"), { strict: true }));
-              const { title, lead, content } = watch();
-              setPreviewState({
-                title,
-                lead,
-                content,
-                createdAt: new Date(Date.now() - ms("1 day")).toISOString(),
-                updatedAt: new Date().toISOString(),
-              });
-            }}
-          >
-            Preview Blog
-          </Button>
-        </Stack>
-      </form>
-
-      <Divider />
-
-      {previewState && <BlogPost blog={previewState} />}
+      <BlogPostForm
+        blog={defaultValues}
+        onCorrectSubmit={onCorrectSubmit}
+        children={SubmitButton}
+      />
     </Stack>
   );
 };

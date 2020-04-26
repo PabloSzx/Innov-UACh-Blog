@@ -4184,10 +4184,10 @@ got@^10.6.0:
     to-readable-stream "^2.0.0"
     type-fest "^0.10.0"
 
-gqless-hooks@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/gqless-hooks/-/gqless-hooks-1.0.6.tgz#68d0ba58a2ec6f3716d07d1fee8dc6f780cd4dcd"
-  integrity sha512-UDc0GWYroIDqk2WBG0hTAcED15EZS25vhmbt52nX3t8ZH9diAkihG+/xfmHmkKuVZQLHxEaVwsfDkhOe/00hgA==
+gqless-hooks@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/gqless-hooks/-/gqless-hooks-1.0.8.tgz#c591ba60d5a547643df1d6aa546e3c0af82dd64f"
+  integrity sha512-YcMj9l2GLI9iEYArQKY5kgyzbGsLxE3D4Ye6nURyDonK0frMZs2toEaeR8kKMi97q4rQy6jfU6BWGz9kOV1mqQ==
   dependencies:
     isomorphic-unfetch "^3.0.0"
 
@@ -6580,10 +6580,10 @@ react-focus-lock@^2.2.1:
     use-callback-ref "^1.2.1"
     use-sidecar "^1.0.1"
 
-react-hook-form@^5.5.3:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.5.3.tgz#6c0fc9136d0b6358ab1917a7b54286b1a7b0c749"
-  integrity sha512-dVPqbJZqLmfbolrC7yP3uDLYYUSSFZBFIeV0hrjve43GxFjXegEgQZ7KzUMxqrCbB+gB+vPA6+A0niyzdmcntQ==
+react-hook-form@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.6.0.tgz#309fbd9780d5d091c6e96796d82d16e0cc5849eb"
+  integrity sha512-/WGDFdrkooe71SKV1IB5bRRWmPHohQW2GfEYivc1mRGEuTIKIzNeAeSLZzTUzAXMVXcoCk2147mb15QwkoyIng==
 
 react-is@16.8.6:
   version "16.8.6"

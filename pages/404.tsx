@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { Spinner } from "@chakra-ui/core";
+
 export default () => {
   const { replace } = useRouter();
 
@@ -8,5 +10,5 @@ export default () => {
     replace("/");
   }, []);
 
-  return null;
+  return <Spinner size="xl" margin="50px" />;
 };

@@ -1,26 +1,13 @@
-import { format, utcToZonedTime } from "date-fns-tz";
-import esLocale from "date-fns/locale/es";
-import Markdown, { MarkdownOptions } from "markdown-to-jsx";
 import { FC, memo } from "react";
 
-import { Box, Heading, Image, Stack, Text } from "@chakra-ui/core";
+import { Box, Heading, Stack, Text } from "@chakra-ui/core";
 
 import { Blog } from "../graphql";
+import { dateToBlogDateString } from "../utils";
+import { Markdown } from "./Markdown";
 
 export type BlogPostProps = {
   blog: Pick<Blog, "content" | "lead" | "title" | "updatedAt" | "createdAt">;
-};
-
-const markdownOptions: MarkdownOptions = {
-  overrides: {
-    Text,
-    Stack,
-    Image,
-    Box,
-    Heading,
-    p: Text,
-    img: Image,
-  },
 };
 
 export const BlogPost: FC<BlogPostProps> = memo(
@@ -35,34 +22,21 @@ export const BlogPost: FC<BlogPostProps> = memo(
           {title}
         </Heading>
         <Text margin="15px" paddingBottom="30px">
-          {format(
-            utcToZonedTime(createdAt, "America/Santiago"),
-            "dd MMMM, yyyy. O",
-            {
-              locale: esLocale,
-            }
-          )}
+          {dateToBlogDateString(createdAt)}
         </Text>
         {lead && (
           <Box textAlign="justify" marginLeft="100px" marginRight="100px">
-            <Markdown options={markdownOptions} children={lead} />
+            <Markdown children={lead} />
           </Box>
         )}
         <Box padding="15px" />
         <Box textAlign="justify" marginLeft="100px" marginRight="100px">
-          <Markdown options={markdownOptions} children={content} />
+          <Markdown children={content} />
         </Box>
 
         {updatedAt !== createdAt && (
           <Text margin="10px" marginTop="20px">
-            Last updated{" "}
-            {format(
-              utcToZonedTime(updatedAt, "America/Santiago"),
-              "dd MMMM, yyyy. O",
-              {
-                locale: esLocale,
-              }
-            )}
+            Last updated {dateToBlogDateString(updatedAt)}
           </Text>
         )}
       </Stack>

@@ -1,4 +1,6 @@
 import { useRouter } from "next/router";
+import NProgress from "nprogress";
+import { useEffect } from "react";
 import { useIsomorphicLayoutEffect } from "react-use";
 
 import { useMutation, useQuery } from "../graphql";
@@ -13,6 +15,8 @@ declare global {
 
 let redirectPath: string | undefined;
 
+let NProgressStarted = false;
+
 export const useAdminAuth = ({
   requireAdmin,
   redirectOnSuccess,
@@ -26,6 +30,23 @@ export const useAdminAuth = ({
       hookId: "currentUser",
     }
   );
+
+  const isCurrentUserLoading =
+    (redirectOnSuccess && isAdmin) || (requireAdmin && !isAdmin)
+      ? true
+      : currentUserState === "loading";
+
+  useEffect(() => {
+    if (isCurrentUserLoading) {
+      NProgressStarted = true;
+      NProgress.start();
+    } else {
+      if (NProgressStarted) {
+        NProgress.done();
+        NProgressStarted = false;
+      }
+    }
+  }, [isCurrentUserLoading]);
 
   useIsomorphicLayoutEffect(() => {
     if (currentUserState === "done") {
@@ -46,10 +67,7 @@ export const useAdminAuth = ({
 
   return {
     isAdmin,
-    isCurrentUserLoading:
-      (redirectOnSuccess && isAdmin) || (requireAdmin && !isAdmin)
-        ? true
-        : currentUserState === "loading",
+    isCurrentUserLoading,
     logout,
   };
 };

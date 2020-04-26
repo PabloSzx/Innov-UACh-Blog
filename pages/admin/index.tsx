@@ -1,31 +1,20 @@
 import { NextPage } from "next";
 
-import { Button, Stack } from "@chakra-ui/core";
-import Link from "next/link";
+import { Button, Stack, Spinner } from "@chakra-ui/core";
 
 import { useAdminAuth } from "../../src/hooks/adminAuth";
-import { Blog } from "../../src/graphql";
+import { AdminNavigation } from "../../src/components/AdminNavigation";
 
 const AdminPage: NextPage = () => {
   const { isCurrentUserLoading, logout } = useAdminAuth({
     requireAdmin: true,
   });
 
-  if (isCurrentUserLoading) return null;
+  if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
   return (
-    <Stack shouldWrapChildren margin="10px">
-      <Link passHref href="/admin/createBlog">
-        <Button as="a" variantColor="blue">
-          Create new Blog Post
-        </Button>
-      </Link>
-
-      <Link passHref href="/admin/editBlog">
-        <Button as="a" variantColor="green">
-          Edit current Blog posts
-        </Button>
-      </Link>
+    <Stack shouldWrapChildren margin="15px">
+      <AdminNavigation />
 
       <Button
         variantColor="red"
