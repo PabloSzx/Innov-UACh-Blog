@@ -25,33 +25,46 @@ export type BlogPostProps = {
 
 export const BlogPost: FC<BlogPostProps> = memo(
   ({ blog: { title, lead, content, updatedAt, createdAt, mainImage } }) => {
+    const marginSides = ["10px", "20px", "100px", "150px"];
     return (
-      <Stack margin="30px" fontSize="1.2em">
+      <Stack fontSize="1.2em">
         {mainImage ? (
           <Image src={mainImage} objectFit="contain" maxHeight="60vh" />
         ) : null}
         <Heading
-          margin="30px"
-          fontSize={["3rem", "4rem", "5rem", "6rem"]}
+          wordBreak="normal"
+          margin={["10px", "20px", "30px"]}
+          fontSize={["2.5rem", "2.5rem", "4rem", "5.5rem"]}
           as="h1"
         >
           {title}
         </Heading>
-        <Text margin="15px" paddingBottom="30px">
+        <Text
+          marginTop="20px"
+          marginLeft={["10px", "20px", "20px"]}
+          paddingBottom="30px"
+        >
           {dateToBlogDateString(createdAt)}
         </Text>
         {lead ? (
-          <Box textAlign="justify" marginLeft="150px" marginRight="150px">
-            <Markdown children={lead} />
-          </Box>
+          <Markdown
+            textAlign="justify"
+            marginLeft={marginSides}
+            marginRight={marginSides}
+            children={lead}
+          />
         ) : null}
         <Box padding="15px" />
-        <Box textAlign="justify" marginLeft="150px" marginRight="150px">
-          <Markdown children={content} />
-        </Box>
+
+        <Markdown
+          textAlign="justify"
+          marginLeft={marginSides}
+          marginRight={marginSides}
+          children={content}
+        />
 
         {updatedAt !== createdAt && (
-          <Text margin="10px" marginTop="20px">
+          <Text margin={["10px", "20px", "20px"]} marginTop="20px">
             Last updated {dateToBlogDateString(updatedAt)}
           </Text>
         )}

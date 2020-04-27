@@ -22,13 +22,7 @@ export const MoreBlogPosts: FC<{
 
   return (
     <Stack>
-      <Stack
-        shouldWrapChildren
-        isInline
-        flexWrap="wrap"
-        justifyContent="space-around"
-        spacing={0}
-      >
+      <Stack isInline flexWrap="wrap" justifyContent="space-around" spacing={0}>
         {blogPostsSlice.map((blog) => {
           return <ExtraBlogPost key={blog._id} blog={blog} />;
         })}

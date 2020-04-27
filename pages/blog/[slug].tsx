@@ -88,7 +88,7 @@ const BlogPage: NextPage<PageProps> = ({ blog, slug, isPreview }) => {
     <>
       {isPreview && <PreviewIndicator />}
       <BlogMetaDataHead blog={blog} url={`${SITE_URL}/blog/${slug}`} />
-      <Stack>
+      <Stack margin="10px">
         <BlogPost blog={blog} />
       </Stack>
     </>

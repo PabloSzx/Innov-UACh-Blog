@@ -105,9 +105,7 @@ export const ExtraBlogPost: FC<{
     <PseudoBox
       key={_id}
       padding="20px"
-      width="600px"
-      marginLeft="100px"
-      marginRight="100px"
+      width={["70vw", "70vw", "70vw", "600px"]}
       marginTop="30px"
       marginBottom="30px"
       borderRadius="10px"
@@ -118,7 +116,7 @@ export const ExtraBlogPost: FC<{
     >
       <BlogImage image={mainImage} alt={mainImageAlt || title} slug={urlSlug} />
       <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
-        <Heading cursor="pointer" as="a" paddingBottom="10px">
+        <Heading userSelect="none" cursor="pointer" as="a" paddingBottom="10px">
           {title}
         </Heading>
       </Link>
@@ -137,7 +135,7 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
       <Head key={1}>
         <title>Comunidades UACh</title>
       </Head>
-      <Stack marginTop="15px" marginBottom="15px">
+      <Stack margin="15px" padding="25px">
         {isPreview && <PreviewIndicator />}
         {nodes
           .slice(0, 1)
@@ -155,10 +153,10 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
                 <PseudoBox
                   alignSelf="center"
                   key={_id}
-                  width="fit-content"
+                  width={["90vw", "90vw", "600px"]}
+                  margin="10px"
                   padding="20px"
-                  maxW="900px"
-                  fontSize="1.3rem"
+                  fontSize={["1rem", "1.2rem", "1.3rem"]}
                   transition="all 0.5s"
                   borderRadius="10px"
                   _hover={{
@@ -172,7 +170,13 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
                   />
 
                   <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
-                    <Heading fontSize="3em" cursor="pointer" as="a">
+                    <Heading
+                      wordBreak="normal"
+                      fontSize={["2.3rem", "2.5rem", "3rem"]}
+                      cursor="pointer"
+                      as="a"
+                      userSelect="none"
+                    >
                       {title}
                     </Heading>
                   </Link>
@@ -192,7 +196,6 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
             }
           )}
         <Stack
-          shouldWrapChildren
           isInline
           flexWrap="wrap"
           justifyContent="space-around"
