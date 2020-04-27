@@ -4,7 +4,15 @@ import Head from "next/head";
 import Link from "next/link";
 import { FC } from "react";
 
-import { Heading, Image, PseudoBox, Stack, Text } from "@chakra-ui/core";
+import {
+  Heading,
+  Image,
+  PseudoBox,
+  Stack,
+  Text,
+  Grid,
+  Divider,
+} from "@chakra-ui/core";
 
 import { executeFromSchema } from "../api-lib/schema";
 import { initialNBlogs } from "../constants";
@@ -109,11 +117,7 @@ export const ExtraBlogPost: FC<{
       key={_id}
       padding="20px"
       height="fit-content"
-      width={["70vw", "70vw", "70vw", "450px"]}
-      marginTop="30px"
-      marginBottom="30px"
-      marginLeft={["0px", "0x", "50px", "100px"]}
-      marginRight={["0px", "0x", "50px", "100px"]}
+      width={["80vw", "70vw", "350px", "550px"]}
       borderRadius="10px"
       transition="all 0.5s"
       _hover={{
@@ -159,10 +163,10 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
                 <PseudoBox
                   alignSelf="center"
                   key={_id}
-                  width={["90vw", "90vw", "600px"]}
+                  width={["90vw", "90vw", "600px", "800px"]}
                   margin="10px"
                   padding="20px"
-                  fontSize={["1rem", "1.2rem", "1.3rem"]}
+                  fontSize={["1rem", "1.2rem", "1.3rem", "1.6rem"]}
                   transition="all 0.5s"
                   borderRadius="10px"
                   _hover={{
@@ -178,7 +182,7 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
                   <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
                     <Heading
                       wordBreak="normal"
-                      fontSize={["2.3rem", "2.5rem", "3rem"]}
+                      fontSize={["2.4rem", "2.6rem", "3rem", "3.5rem"]}
                       cursor="pointer"
                       as="a"
                       userSelect="none"
@@ -201,17 +205,27 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
               );
             }
           )}
-        <Stack
-          isInline
-          flexWrap="wrap"
+        <Divider />
+        <Heading textAlign="center" fontSize="3rem">
+          More News
+        </Heading>
+        <Grid
+          alignSelf="center"
+          gridRowGap="20px"
+          gridColumnGap={["0px", "0px", "0px", "20px"]}
+          gridTemplateColumns={[
+            "repeat(1, 1fr)",
+            "repeat(1, 1fr)",
+            "repeat(2, 1fr)",
+            "repeat(2, 1fr)",
+          ]}
           justifyContent="space-around"
-          spacing={0}
         >
           {nodes.slice(1, initialNBlogs).map((blog) => {
             return <ExtraBlogPost key={blog._id} blog={blog} />;
           })}
           {nodes.length > initialNBlogs && <MoreBlogPosts blogPosts={nodes} />}
-        </Stack>
+        </Grid>
       </Stack>
     </>
   );
