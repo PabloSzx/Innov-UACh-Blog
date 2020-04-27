@@ -2,19 +2,23 @@ import { FC, useCallback, useState } from "react";
 
 import { Box, Button, Stack } from "@chakra-ui/core";
 
+import { initialNBlogs } from "../../constants";
 import { BlogProps, ExtraBlogPost } from "../../pages/index";
 
+let nSlideState = initialNBlogs;
+
 export const MoreBlogPosts: FC<{
-  initialN: number;
   blogPosts: BlogProps["blogList"]["nodes"];
-}> = ({ initialN, blogPosts }) => {
-  const [nSlice, setNSlice] = useState(initialN);
+}> = ({ blogPosts }) => {
+  const [nSlice, setNSlice] = useState(nSlideState);
 
   const addMorePosts = useCallback(() => {
-    setNSlice((n) => (n += 4));
+    setNSlice((n) => {
+      return (nSlideState = n += 4);
+    });
   }, []);
 
-  const blogPostsSlice = blogPosts.slice(initialN, nSlice);
+  const blogPostsSlice = blogPosts.slice(initialNBlogs, nSlice);
 
   return (
     <Stack>

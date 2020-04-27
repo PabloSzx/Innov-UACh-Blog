@@ -10,3 +10,5 @@ export const ONE_DAY_MS = 86400000;
 export const UNAUTHORIZED_ERROR = "Unauthorized operation!";
 
 export const SITE_URL = process.env.VERCEL_URL || "http://localhost:3000";
+
+export const initialNBlogs = 5;

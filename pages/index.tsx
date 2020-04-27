@@ -7,13 +7,13 @@ import { FC } from "react";
 import { Heading, Image, PseudoBox, Stack, Text } from "@chakra-ui/core";
 
 import { executeFromSchema } from "../api-lib/schema";
+import { initialNBlogs } from "../constants";
 import { PreviewIndicator } from "../src/components/DynamicImports";
 import { Markdown } from "../src/components/Markdown";
 import { MoreBlogPosts } from "../src/components/MoreBlogPosts";
 import { dateToBlogDateString } from "../src/utils";
 
 import type { Query, Blog } from "../src/graphql/generated";
-
 export type BlogProps = {
   blogList: {
     pageInfo: {
@@ -95,8 +95,6 @@ const BlogImage: FC<{
     </Link>
   );
 };
-
-const initialNBlogs = 5;
 
 export const ExtraBlogPost: FC<{
   blog: BlogProps["blogList"]["nodes"][number];
@@ -205,9 +203,7 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
           })}
         </Stack>
 
-        {nodes.length > initialNBlogs && (
-          <MoreBlogPosts initialN={initialNBlogs} blogPosts={nodes} />
-        )}
+        {nodes.length > initialNBlogs && <MoreBlogPosts blogPosts={nodes} />}
       </Stack>
     </>
   );
