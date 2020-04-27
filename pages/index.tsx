@@ -7,11 +7,9 @@ import { FC } from "react";
 import { Heading, Image, PseudoBox, Stack, Text } from "@chakra-ui/core";
 
 import { executeFromSchema } from "../api-lib/schema";
-import {
-  MoreBlogPosts,
-  PreviewIndicator,
-} from "../src/components/DynamicImports";
+import { PreviewIndicator } from "../src/components/DynamicImports";
 import { Markdown } from "../src/components/Markdown";
+import { MoreBlogPosts } from "../src/components/MoreBlogPosts";
 import { dateToBlogDateString } from "../src/utils";
 
 import type { Query, Blog } from "../src/graphql/generated";
@@ -35,11 +33,9 @@ export type BlogProps = {
   dateNow: Query["dateNow"];
 };
 
-export const initialNBlogs = 5;
-
-const BlogListGql: DocumentNode<BlogProps, never> = gql`
-  query {
-    blogList(pagination: { limit: ${initialNBlogs}, skip: 0 }) {
+const BlogListGql: DocumentNode<BlogProps, { skip: number }> = gql`
+  query($skip: NonNegativeInt) {
+    blogList(pagination: { limit: 50, skip: $skip }) {
       pageInfo {
         hasNextPage
       }
@@ -64,7 +60,17 @@ interface PageProps extends BlogProps {
 export const getStaticProps: GetStaticProps<PageProps> = async ({
   preview,
 }) => {
-  const props = await executeFromSchema(BlogListGql);
+  let props = await executeFromSchema(BlogListGql);
+  while (props.blogList.pageInfo.hasNextPage) {
+    const newData = await executeFromSchema(BlogListGql, {
+      variables: {
+        skip: props.blogList.nodes.length,
+      },
+    });
+    props.blogList.pageInfo = newData.blogList.pageInfo;
+    props.blogList.nodes.push(...newData.blogList.nodes);
+    props.dateNow = newData.dateNow;
+  }
 
   return {
     props: {
@@ -89,6 +95,8 @@ const BlogImage: FC<{
     </Link>
   );
 };
+
+const initialNBlogs = 5;
 
 export const ExtraBlogPost: FC<{
   blog: BlogProps["blogList"]["nodes"][number];
@@ -125,13 +133,7 @@ export const ExtraBlogPost: FC<{
   );
 };
 
-const IndexPage: NextPage<PageProps> = ({
-  blogList: {
-    nodes,
-    pageInfo: { hasNextPage },
-  },
-  isPreview,
-}) => {
+const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
   return (
     <>
       <Head key={1}>
@@ -198,12 +200,14 @@ const IndexPage: NextPage<PageProps> = ({
           justifyContent="space-around"
           spacing={0}
         >
-          {nodes.slice(1).map((blog) => {
+          {nodes.slice(1, initialNBlogs).map((blog) => {
             return <ExtraBlogPost key={blog._id} blog={blog} />;
           })}
         </Stack>
 
-        {hasNextPage && <MoreBlogPosts />}
+        {nodes.length > initialNBlogs && (
+          <MoreBlogPosts initialN={initialNBlogs} blogPosts={nodes} />
+        )}
       </Stack>
     </>
   );
