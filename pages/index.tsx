@@ -8,9 +8,12 @@ import { Heading, Image, PseudoBox, Stack, Text } from "@chakra-ui/core";
 
 import { executeFromSchema } from "../api-lib/schema";
 import { initialNBlogs } from "../constants";
-import { PreviewIndicator } from "../src/components/DynamicImports";
+import {
+  PreviewIndicator,
+  MoreBlogPosts,
+} from "../src/components/DynamicImports";
 import { Markdown } from "../src/components/Markdown";
-import { MoreBlogPosts } from "../src/components/MoreBlogPosts";
+
 import { dateToBlogDateString } from "../src/utils";
 
 import type { Query, Blog } from "../src/graphql/generated";
@@ -105,9 +108,12 @@ export const ExtraBlogPost: FC<{
     <PseudoBox
       key={_id}
       padding="20px"
-      width={["70vw", "70vw", "70vw", "600px"]}
+      height="fit-content"
+      width={["70vw", "70vw", "70vw", "450px"]}
       marginTop="30px"
       marginBottom="30px"
+      marginLeft={["0px", "0x", "50px", "100px"]}
+      marginRight={["0px", "0x", "50px", "100px"]}
       borderRadius="10px"
       transition="all 0.5s"
       _hover={{
@@ -204,9 +210,8 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
           {nodes.slice(1, initialNBlogs).map((blog) => {
             return <ExtraBlogPost key={blog._id} blog={blog} />;
           })}
+          {nodes.length > initialNBlogs && <MoreBlogPosts blogPosts={nodes} />}
         </Stack>
-
-        {nodes.length > initialNBlogs && <MoreBlogPosts blogPosts={nodes} />}
       </Stack>
     </>
   );

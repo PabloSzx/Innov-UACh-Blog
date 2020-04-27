@@ -6,3 +6,7 @@ export const PreviewIndicator = dynamic(
     ssr: false,
   }
 );
+
+export const MoreBlogPosts = dynamic(() => import("./MoreBlogPosts"), {
+  ssr: false,
+});
