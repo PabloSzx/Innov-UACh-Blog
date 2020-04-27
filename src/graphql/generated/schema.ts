@@ -104,6 +104,21 @@ export const schema = {
         get urlSlug() {
           return new FieldNode(schema.String, undefined, false);
         },
+        get mainImage() {
+          return new FieldNode(schema.URL, undefined, true);
+        },
+        get mainImageAlt() {
+          return new FieldNode(schema.String, undefined, true);
+        },
+        get author() {
+          return new FieldNode(schema.String, undefined, true);
+        },
+        get metaDescription() {
+          return new FieldNode(schema.String, undefined, true);
+        },
+        get metaSection() {
+          return new FieldNode(schema.String, undefined, true);
+        },
         get updatedAt() {
           return new FieldNode(schema.DateTime, undefined, false);
         },
@@ -113,6 +128,12 @@ export const schema = {
       },
       { name: "Blog", extension: ((extensions as any) || {}).Blog }
     );
+  },
+  get URL() {
+    return new ScalarNode({
+      name: "URL",
+      extension: ((extensions as any) || {}).URL,
+    });
   },
   get DateTime() {
     return new ScalarNode({
@@ -219,6 +240,9 @@ export const schema = {
   get Mutation() {
     return new ObjectNode(
       {
+        get enablePreviewMode() {
+          return new FieldNode(schema.Boolean, undefined, false);
+        },
         get logout() {
           return new FieldNode(schema.Boolean, undefined, false);
         },
@@ -283,6 +307,21 @@ export const schema = {
         get urlSlug() {
           return new InputNodeField(schema.String, false);
         },
+        get mainImage() {
+          return new InputNodeField(schema.URL, true);
+        },
+        get mainImageAlt() {
+          return new InputNodeField(schema.String, true);
+        },
+        get author() {
+          return new InputNodeField(schema.String, true);
+        },
+        get metaDescription() {
+          return new InputNodeField(schema.String, true);
+        },
+        get metaSection() {
+          return new InputNodeField(schema.String, true);
+        },
       },
       { name: "BlogCreate" }
     );
@@ -304,6 +343,21 @@ export const schema = {
         },
         get urlSlug() {
           return new InputNodeField(schema.String, false);
+        },
+        get mainImage() {
+          return new InputNodeField(schema.URL, true);
+        },
+        get mainImageAlt() {
+          return new InputNodeField(schema.String, true);
+        },
+        get author() {
+          return new InputNodeField(schema.String, true);
+        },
+        get metaDescription() {
+          return new InputNodeField(schema.String, true);
+        },
+        get metaSection() {
+          return new InputNodeField(schema.String, true);
         },
       },
       { name: "BlogUpdate" }

@@ -1,5 +1,4 @@
 import { Maybe } from "gqless-hooks";
-import ms from "ms";
 import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
 import { FormContext, useForm, useFormContext } from "react-hook-form";
 import slugify from "slugify";
@@ -15,13 +14,14 @@ import {
   Textarea,
 } from "@chakra-ui/core";
 
+import { ONE_DAY_MS } from "../../constants";
 import { BlogCreate, BlogUpdate } from "../graphql";
 import { BlogPost, BlogPostProps } from "./BlogPost";
 
 export type BlogEditCreatePostProps = BlogCreate &
   Partial<Pick<BlogUpdate, "_id">>;
 
-const createdAt = new Date(Date.now() - ms("1 day")).toISOString();
+const createdAt = new Date(Date.now() - ONE_DAY_MS).toISOString();
 const updatedAt = new Date().toISOString();
 
 const nestTrue = { nest: true };
@@ -33,13 +33,24 @@ export const PreviewBlog: FC = memo(() => {
 
   useEffect(() => {
     const checkSetState = () => {
-      const { title, lead, content } = watch(nestTrue);
+      const {
+        title,
+        lead,
+        content,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
+      } = watch(nestTrue);
 
       if (
         previewState != null &&
         content === previewState.content &&
         lead === previewState.lead &&
-        title === previewState.title
+        title === previewState.title &&
+        mainImage === previewState.mainImage &&
+        author === author
       ) {
         return;
       }
@@ -50,6 +61,11 @@ export const PreviewBlog: FC = memo(() => {
         content,
         createdAt,
         updatedAt,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       });
     };
 
@@ -84,42 +100,61 @@ export const BlogPostForm: FC<{
   const { register, handleSubmit, errors, reset } = formMethods;
 
   const onSubmit = useCallback(
-    handleSubmit((data) => {
-      let { title, lead, content, urlSlug } = data;
-
-      title = title.trim();
-      lead = lead?.trim();
-      content = content.trim();
-      urlSlug = slugify(urlSlug.trim(), {
-        strict: true,
-      });
-
-      reset({
+    handleSubmit(
+      ({
         title,
         lead,
         content,
         urlSlug,
-      });
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
+      }) => {
+        title = title.trim();
+        lead = lead?.trim() || null;
+        content = content.trim();
+        mainImage = mainImage?.trim() || null;
+        urlSlug = slugify(urlSlug.trim(), {
+          strict: true,
+        });
+        mainImageAlt = mainImageAlt?.trim() || null;
+        author = author?.trim() || null;
+        metaDescription = metaDescription?.trim() || null;
+        metaSection = metaSection?.trim() || null;
 
-      onCorrectSubmitRef
-        .current({
-          _id: blog?._id,
+        const formData = {
           title,
           lead,
           content,
           urlSlug,
-        })
-        .then((newData) => {
-          if (newData) reset(newData);
-        });
-    }),
+          mainImage,
+          mainImageAlt,
+          author,
+          metaDescription,
+          metaSection,
+        };
+
+        reset(formData);
+
+        onCorrectSubmitRef
+          .current({
+            _id: blog?._id,
+            ...formData,
+          })
+          .then((newData) => {
+            if (newData?._id) reset(newData);
+          });
+      }
+    ),
     [handleSubmit]
   );
 
   return (
     <form onSubmit={onSubmit}>
       <Stack margin="20px">
-        <FormControl isInvalid={!!errors.title}>
+        <FormControl isRequired isInvalid={!!errors.title}>
           <FormLabel>Title</FormLabel>
           <Input
             name="title"
@@ -139,6 +174,39 @@ export const BlogPostForm: FC<{
           <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
         </FormControl>
 
+        <FormControl isInvalid={!!errors.mainImage}>
+          <FormLabel>Main Image</FormLabel>
+          <Input name="mainImage" type="url" ref={register({})} />
+          <FormHelperText>
+            Main image used in blog post preview and page
+          </FormHelperText>
+          <FormErrorMessage>{errors.mainImage?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.mainImageAlt}>
+          <FormLabel>Main Image Alt</FormLabel>
+          <Input name="mainImageAlt" ref={register({})} />
+          <FormHelperText>
+            Text used as image description, for accessibility and SEO
+          </FormHelperText>
+          <FormErrorMessage>{errors.mainImageAlt?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.author}>
+          <FormLabel>Author</FormLabel>
+          <Input
+            name="author"
+            ref={register({
+              maxLength: {
+                value: 25,
+                message: "The author should be at most 25 characters",
+              },
+            })}
+          />
+          <FormHelperText>Author mentioned in the blog post</FormHelperText>
+          <FormErrorMessage>{errors.author?.message}</FormErrorMessage>
+        </FormControl>
+
         <FormControl isInvalid={!!errors.lead}>
           <FormLabel>Lead</FormLabel>
           <Textarea height="100px" name="lead" ref={register} />
@@ -148,7 +216,7 @@ export const BlogPostForm: FC<{
           <FormErrorMessage>{errors.lead?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.content}>
+        <FormControl isRequired isInvalid={!!errors.content}>
           <FormLabel>Content</FormLabel>
           <Textarea
             height="300px"
@@ -162,7 +230,7 @@ export const BlogPostForm: FC<{
           <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.urlSlug}>
+        <FormControl isRequired isInvalid={!!errors.urlSlug}>
           <FormLabel>URL Slug</FormLabel>
           <Input
             name="urlSlug"
@@ -187,6 +255,40 @@ export const BlogPostForm: FC<{
             </i>
           </FormHelperText>
           <FormErrorMessage>{errors.urlSlug?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.metaDescription}>
+          <FormLabel>Meta Description</FormLabel>
+          <Input
+            name="metaDescription"
+            ref={register({
+              maxLength: {
+                value: 100,
+                message: "This description should be at most 100 characters",
+              },
+            })}
+          />
+          <FormHelperText>
+            Meta description used for SEO purposes, it has to be plain text
+          </FormHelperText>
+          <FormErrorMessage>{errors.metaDescription?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.metaSection}>
+          <FormLabel>Meta Section</FormLabel>
+          <Input
+            name="metaSection"
+            ref={register({
+              maxLength: {
+                value: 30,
+                message: "This section should be at most 30 characters",
+              },
+            })}
+          />
+          <FormHelperText>
+            Meta section used for SEO purposes, for example: "Technology"
+          </FormHelperText>
+          <FormErrorMessage>{errors.metaSection?.message}</FormErrorMessage>
         </FormControl>
 
         <FormContext {...formMethods}>

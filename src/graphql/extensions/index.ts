@@ -4,7 +4,7 @@ export declare const DateTime: string;
 export declare const ObjectId: string;
 export declare const PositiveInt: number;
 export declare const NonNegativeInt: number;
-
+export declare const URL: string;
 /**
  * Add a key to a type
  */

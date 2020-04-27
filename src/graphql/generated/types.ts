@@ -70,11 +70,22 @@ type t_Blog = FieldsType<
     lead?: t_String | null;
     content: t_String;
     urlSlug: t_String;
+    mainImage?: t_URL | null;
+    mainImageAlt?: t_String | null;
+    author?: t_String | null;
+    metaDescription?: t_String | null;
+    metaSection?: t_String | null;
     updatedAt: t_DateTime;
     createdAt: t_DateTime;
   },
   Extension<"Blog">
 >;
+
+/**
+ * @name URL
+ * @type SCALAR
+ */
+type t_URL<T extends any = any> = ScalarType<T, Extension<"URL">>;
 
 /**
  * @name DateTime
@@ -187,6 +198,7 @@ type t_PageInfo = FieldsType<
 type t_Mutation = FieldsType<
   {
     __typename: t_String<"Mutation">;
+    enablePreviewMode: t_Boolean;
     logout: t_Boolean;
     login: FieldsTypeArg<{ token: string }, t_Boolean>;
     createBlog: FieldsTypeArg<{ blog: BlogCreate }, t_Blog>;
@@ -204,6 +216,11 @@ export type BlogCreate = {
   lead?: string | null;
   content: string;
   urlSlug: string;
+  mainImage?: any | null;
+  mainImageAlt?: string | null;
+  author?: string | null;
+  metaDescription?: string | null;
+  metaSection?: string | null;
 };
 
 /**
@@ -216,6 +233,11 @@ export type BlogUpdate = {
   lead?: string | null;
   content: string;
   urlSlug: string;
+  mainImage?: any | null;
+  mainImageAlt?: string | null;
+  author?: string | null;
+  metaDescription?: string | null;
+  metaSection?: string | null;
 };
 
 /**
@@ -416,6 +438,12 @@ export type ObjectId = TypeData<t_ObjectId>;
  * @type OBJECT
  */
 export type Blog = TypeData<t_Blog>;
+
+/**
+ * @name URL
+ * @type SCALAR
+ */
+export type URL = TypeData<t_URL>;
 
 /**
  * @name DateTime

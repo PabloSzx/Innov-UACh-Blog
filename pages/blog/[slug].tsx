@@ -1,11 +1,15 @@
 import { DocumentNode, gql } from "graphql-schema-query";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
+import { Stack } from "@chakra-ui/core";
+
 import { executeFromSchema } from "../../api-lib/schema";
 import { BlogPost, BlogPostProps } from "../../src/components/BlogPost";
+import { PreviewIndicator } from "../../src/components/DynamicImports";
+import { BlogMetaDataHead } from "../../src/components/MetaTags";
 
 import type { Query } from "../../src/graphql/generated";
-
+import { SITE_URL } from "../../constants";
 const BlogGql: DocumentNode<
   BlogPostProps,
   {
@@ -17,8 +21,14 @@ const BlogGql: DocumentNode<
       title
       lead
       content
+      mainImage
       updatedAt
       createdAt
+      mainImage
+      mainImageAlt
+      author
+      metaDescription
+      metaSection
     }
   }
 `;
@@ -34,8 +44,14 @@ const PathsGql: DocumentNode<
   }
 `;
 
-export const getStaticProps: GetStaticProps<BlogPostProps> = async ({
+interface PageProps extends BlogPostProps {
+  slug: string;
+  isPreview: boolean;
+}
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({
   params,
+  preview,
 }) => {
   const slug = params?.slug;
 
@@ -48,7 +64,11 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({
   });
 
   return {
-    props,
+    props: {
+      ...props,
+      slug,
+      isPreview: !!preview,
+    },
   };
 };
 
@@ -61,10 +81,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const BlogPage: NextPage<BlogPostProps> = ({ blog }) => {
+const BlogPage: NextPage<PageProps> = ({ blog, slug, isPreview }) => {
   if (!blog) return null;
 
-  return <BlogPost blog={blog} />;
+  return (
+    <>
+      {isPreview && <PreviewIndicator />}
+      <BlogMetaDataHead blog={blog} url={`${SITE_URL}/blog/${slug}`} />
+      <Stack>
+        <BlogPost blog={blog} />
+      </Stack>
+    </>
+  );
 };
 
 export default BlogPage;

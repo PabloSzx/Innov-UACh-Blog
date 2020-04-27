@@ -3,17 +3,27 @@
 
 type Blog {
   _id: ObjectId!
+  author: String
   content: String!
   createdAt: DateTime!
   lead: String
+  mainImage: URL
+  mainImageAlt: String
+  metaDescription: String
+  metaSection: String
   title: String!
   updatedAt: DateTime!
   urlSlug: String!
 }
 
 input BlogCreate {
+  author: String
   content: String!
   lead: String
+  mainImage: URL
+  mainImageAlt: String
+  metaDescription: String
+  metaSection: String
   title: String!
   urlSlug: String!
 }
@@ -43,8 +53,13 @@ input BlogSortValue {
 
 input BlogUpdate {
   _id: ObjectId!
+  author: String
   content: String!
   lead: String
+  mainImage: URL
+  mainImageAlt: String
+  metaDescription: String
+  metaSection: String
   title: String!
   urlSlug: String!
 }
@@ -58,6 +73,7 @@ scalar DateTime
 
 type Mutation {
   createBlog(blog: BlogCreate!): Blog!
+  enablePreviewMode: Boolean!
   login(token: String!): Boolean!
   logout: Boolean!
   updateBlog(blog: BlogUpdate!): Blog
@@ -128,3 +144,8 @@ enum SortDirection {
   ASC
   DESC
 }
+
+"""
+A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+"""
+scalar URL

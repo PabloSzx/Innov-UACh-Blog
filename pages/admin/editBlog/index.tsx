@@ -23,6 +23,11 @@ declare global {
         | "title"
         | "updatedAt"
         | "urlSlug"
+        | "mainImage"
+        | "mainImageAlt"
+        | "author"
+        | "metaDescription"
+        | "metaSection"
       >[];
     };
   }
@@ -88,6 +93,11 @@ const EditBlogListPage: NextPage = () => {
             updatedAt,
             lead,
             content,
+            mainImage,
+            mainImageAlt,
+            author,
+            metaDescription,
+            metaSection,
           }: gqlessSharedCache["blogsPaginated"]["nodes"][number]) => {
             return {
               _id,
@@ -97,6 +107,11 @@ const EditBlogListPage: NextPage = () => {
               updatedAt,
               lead,
               content,
+              mainImage,
+              mainImageAlt,
+              author,
+              metaDescription,
+              metaSection,
             };
           }
         ),

@@ -42,6 +42,11 @@ export const BlogCreate = inputObjectType({
     t.string("lead", { nullable: true });
     t.string("content");
     t.string("urlSlug");
+    t.url("mainImage", { nullable: true });
+    t.string("mainImageAlt", { nullable: true });
+    t.string("author", { nullable: true });
+    t.string("metaDescription", { nullable: true });
+    t.string("metaSection", { nullable: true });
   },
 });
 
@@ -53,6 +58,11 @@ export const BlogUpdate = inputObjectType({
     t.string("lead", { nullable: true });
     t.string("content");
     t.string("urlSlug");
+    t.url("mainImage", { nullable: true });
+    t.string("mainImageAlt", { nullable: true });
+    t.string("author", { nullable: true });
+    t.string("metaDescription", { nullable: true });
+    t.string("metaSection", { nullable: true });
   },
 });
 
@@ -64,7 +74,25 @@ export const Blog = objectType({
     t.string("lead", { nullable: true });
     t.string("content");
     t.string("urlSlug");
+    t.url("mainImage", { nullable: true });
+    t.string("mainImageAlt", { nullable: true });
+    t.string("author", { nullable: true });
+    t.string("metaDescription", { nullable: true });
+    t.string("metaSection", { nullable: true });
+
     t.dateTime("updatedAt");
     t.dateTime("createdAt");
+  },
+});
+
+export const BlogNodes = objectType({
+  name: "BlogNodes",
+  definition(t) {
+    t.field("pageInfo", {
+      type: "PageInfo",
+    });
+    t.list.field("nodes", {
+      type: "Blog",
+    });
   },
 });

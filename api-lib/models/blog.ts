@@ -21,6 +21,11 @@ const BlogSchema = createSchema(
       unique: true,
       required: true,
     }),
+    mainImage: Type.string({}),
+    mainImageAlt: Type.string({}),
+    author: Type.string({}),
+    metaDescription: Type.string({}),
+    metaSection: Type.string({}),
   },
   {
     timestamps: true,

@@ -2,7 +2,6 @@ import { Maybe, setCacheData } from "gqless-hooks";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect } from "react";
-import { useFormContext } from "react-hook-form";
 
 import { Button, Heading, Spinner, Stack } from "@chakra-ui/core";
 
@@ -11,12 +10,7 @@ import {
   BlogEditCreatePostProps,
   BlogPostForm,
 } from "../../../src/components/BlogPostForm";
-import {
-  BlogCreate,
-  BlogUpdate,
-  useMutation,
-  useQuery,
-} from "../../../src/graphql";
+import { BlogUpdate, useMutation, useQuery } from "../../../src/graphql";
 import { useAdminAuth } from "../../../src/hooks/adminAuth";
 
 export const getServerSideProps: GetServerSideProps<EditBlogPageProps> = async ({
@@ -63,6 +57,11 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
         urlSlug,
         updatedAt,
         createdAt,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       } = blogData;
       return {
         _id,
@@ -72,9 +71,15 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
         urlSlug,
         updatedAt,
         createdAt,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       };
     },
     {
+      skip: !isAdmin,
       sharedCacheId,
       variables: {
         slug,
@@ -101,6 +106,11 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
         createdAt,
         lead,
         urlSlug,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       } = updatedBlog;
 
       return {
@@ -111,15 +121,20 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
         createdAt,
         lead,
         urlSlug,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       };
     },
     {
       sharedCacheId,
       onCompleted(updatedBlog) {
-        if (updatedBlog == null) return;
+        if (updatedBlog?._id == null) return;
 
         setCacheData("blogsPaginated", (prevData) => {
-          if (!prevData) return null;
+          if (!prevData?.nodes) return null;
 
           return {
             hasNextPage: prevData.hasNextPage,
@@ -130,6 +145,10 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
               return blog;
             }),
           };
+        });
+
+        console.log({
+          updatedBlog,
         });
 
         if (updatedBlog.urlSlug !== slug) {
@@ -152,16 +171,11 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
   const onCorrectSubmit = useCallback<
     (data: BlogEditCreatePostProps) => Promise<Maybe<BlogEditCreatePostProps>>
   >(
-    async (data) => {
-      const { title, lead, content, urlSlug, _id } = data;
-
+    async ({ _id, ...blog }) => {
       return await updateBlog({
         variables: {
           _id,
-          title,
-          lead,
-          content,
-          urlSlug,
+          ...blog,
         },
       });
     },

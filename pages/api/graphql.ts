@@ -101,7 +101,14 @@ const buildContext = ({
   const logout = () => {
     res.setHeader("Set-Cookie", "authorization=; Max-Age=-1");
   };
-  return { loginOrRefresh, logout, isAdmin, checkToken };
+  return {
+    loginOrRefresh,
+    logout,
+    isAdmin,
+    checkToken,
+    setPreviewData: res.setPreviewData,
+    clearPreviewData: res.clearPreviewData,
+  };
 };
 
 declare global {

@@ -1,6 +1,10 @@
 import { Kind } from "graphql";
 import { GraphQLDateTime } from "graphql-iso-date";
-import { NonNegativeIntResolver, PositiveIntResolver } from "graphql-scalars";
+import {
+  NonNegativeIntResolver,
+  PositiveIntResolver,
+  URLResolver,
+} from "graphql-scalars";
 import { ObjectId } from "mongodb";
 
 import { asNexusMethod, scalarType } from "@nexus/schema";
@@ -29,3 +33,4 @@ export const NonNegativeInt = asNexusMethod(
   "nonNegativeInt"
 );
 export const PositiveInt = asNexusMethod(PositiveIntResolver, "positiveInt");
+export const URLScalar = asNexusMethod(URLResolver, "url");

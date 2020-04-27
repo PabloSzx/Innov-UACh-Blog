@@ -7,6 +7,15 @@ import { UNAUTHORIZED_ERROR } from "../../constants";
 
 export const Mutation = mutationType({
   definition(t) {
+    t.boolean("enablePreviewMode", {
+      resolve(_root, _args, { isAdmin, setPreviewData }) {
+        if (isAdmin()) {
+          setPreviewData("");
+          return true;
+        }
+        return false;
+      },
+    });
     t.boolean("logout", {
       resolve(_root, _args, { isAdmin, logout }) {
         logout();
@@ -30,15 +39,23 @@ export const Mutation = mutationType({
       args: {
         blog: "BlogCreate",
       },
-      async resolve(_root, { blog: { urlSlug, ...blog } }, { isAdmin }) {
+      async resolve(
+        _root,
+        { blog: { urlSlug, ...blog } },
+        { isAdmin, setPreviewData }
+      ) {
         if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
 
-        return await BlogModel.create({
+        const createdBlog = await BlogModel.create({
           urlSlug: slugify(urlSlug, {
             strict: true,
           }),
           ...blog,
         });
+
+        setPreviewData("");
+
+        return createdBlog;
       },
     });
     t.field("updateBlog", {
@@ -49,15 +66,32 @@ export const Mutation = mutationType({
       },
       async resolve(
         _root,
-        { blog: { _id, lead, urlSlug, ...blog } },
-        { isAdmin }
+        {
+          blog: {
+            _id,
+            lead,
+            urlSlug,
+            author,
+            mainImage,
+            mainImageAlt,
+            metaDescription,
+            metaSection,
+            ...blog
+          },
+        },
+        { isAdmin, setPreviewData }
       ) {
         if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
 
-        return await BlogModel.findByIdAndUpdate(
+        const updatedBlog = await BlogModel.findByIdAndUpdate(
           _id,
           {
             ...blog,
+            mainImage: mainImage ?? undefined,
+            mainImageAlt: mainImageAlt ?? undefined,
+            metaDescription: metaDescription ?? undefined,
+            metaSection: metaSection ?? undefined,
+            author: author ?? undefined,
             lead: lead ?? undefined,
             urlSlug: slugify(urlSlug, {
               strict: true,
@@ -67,6 +101,12 @@ export const Mutation = mutationType({
             new: true,
           }
         );
+
+        if (updatedBlog) {
+          setPreviewData("");
+        }
+
+        return updatedBlog;
       },
     });
   },

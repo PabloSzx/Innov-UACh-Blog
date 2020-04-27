@@ -27,6 +27,12 @@ declare global {
         core.GetGen3<"inputTypes", TypeName, FieldName>
       >
     ): void; // "PositiveInt";
+    url<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<
+        core.GetGen3<"inputTypes", TypeName, FieldName>
+      >
+    ): void; // "URL";
   }
 }
 declare global {
@@ -47,6 +53,10 @@ declare global {
       fieldName: FieldName,
       ...opts: core.ScalarOutSpread<TypeName, FieldName>
     ): void; // "PositiveInt";
+    url<FieldName extends string>(
+      fieldName: FieldName,
+      ...opts: core.ScalarOutSpread<TypeName, FieldName>
+    ): void; // "URL";
   }
 }
 
@@ -57,8 +67,13 @@ declare global {
 export interface NexusGenInputs {
   BlogCreate: {
     // input type
+    author?: string | null; // String
     content: string; // String!
     lead?: string | null; // String
+    mainImage?: string | null; // URL
+    mainImageAlt?: string | null; // String
+    metaDescription?: string | null; // String
+    metaSection?: string | null; // String
     title: string; // String!
     urlSlug: string; // String!
   };
@@ -76,8 +91,13 @@ export interface NexusGenInputs {
   BlogUpdate: {
     // input type
     _id: ObjectId; // ObjectId!
+    author?: string | null; // String
     content: string; // String!
     lead?: string | null; // String
+    mainImage?: string | null; // URL
+    mainImageAlt?: string | null; // String
+    metaDescription?: string | null; // String
+    metaSection?: string | null; // String
     title: string; // String!
     urlSlug: string; // String!
   };
@@ -97,9 +117,14 @@ export interface NexusGenRootTypes {
   Blog: {
     // root type
     _id: ObjectId; // ObjectId!
+    author?: string | null; // String
     content: string; // String!
     createdAt: Date; // DateTime!
     lead?: string | null; // String
+    mainImage?: string | null; // URL
+    mainImageAlt?: string | null; // String
+    metaDescription?: string | null; // String
+    metaSection?: string | null; // String
     title: string; // String!
     updatedAt: Date; // DateTime!
     urlSlug: string; // String!
@@ -127,6 +152,7 @@ export interface NexusGenRootTypes {
   NonNegativeInt: number;
   ObjectId: ObjectId;
   PositiveInt: number;
+  URL: string;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -143,9 +169,14 @@ export interface NexusGenFieldTypes {
   Blog: {
     // field return type
     _id: ObjectId; // ObjectId!
+    author: string | null; // String
     content: string; // String!
     createdAt: Date; // DateTime!
     lead: string | null; // String
+    mainImage: string | null; // URL
+    mainImageAlt: string | null; // String
+    metaDescription: string | null; // String
+    metaSection: string | null; // String
     title: string; // String!
     updatedAt: Date; // DateTime!
     urlSlug: string; // String!
@@ -158,6 +189,7 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     createBlog: NexusGenRootTypes["Blog"]; // Blog!
+    enablePreviewMode: boolean; // Boolean!
     login: boolean; // Boolean!
     logout: boolean; // Boolean!
     updateBlog: NexusGenRootTypes["Blog"] | null; // Blog
@@ -240,7 +272,8 @@ export type NexusGenScalarNames =
   | "NonNegativeInt"
   | "ObjectId"
   | "PositiveInt"
-  | "String";
+  | "String"
+  | "URL";
 
 export type NexusGenUnionNames = never;
 

@@ -2,8 +2,7 @@ import { Maybe, setCacheData } from "gqless-hooks";
 import { loremIpsum } from "lorem-ipsum";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FC, useCallback, useMemo } from "react";
-import { useFormContext } from "react-hook-form";
+import { FC, useCallback, useMemo, useState } from "react";
 
 import {
   Alert,
@@ -11,8 +10,8 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  Stack,
   Spinner,
+  Stack,
 } from "@chakra-ui/core";
 
 import { AdminNavigation } from "../../src/components/AdminNavigation";
@@ -46,6 +45,8 @@ const CreateBlogPage: NextPage = () => {
     };
   }, []);
 
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
   const { push } = useRouter();
 
   const [
@@ -60,18 +61,37 @@ const CreateBlogPage: NextPage = () => {
         blog: blogVariables,
       });
 
+      const {
+        _id,
+        title,
+        content,
+        updatedAt,
+        createdAt,
+        urlSlug,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
+      } = blog;
+
       return {
-        _id: blog._id,
-        title: blog.title,
-        content: blog.content,
-        updatedAt: blog.updatedAt,
-        createdAt: blog.createdAt,
-        urlSlug: blog.urlSlug,
+        _id,
+        title,
+        content,
+        updatedAt,
+        createdAt,
+        urlSlug,
+        mainImage,
+        mainImageAlt,
+        author,
+        metaDescription,
+        metaSection,
       };
     },
     {
       onCompleted(createdBlogData) {
-        if (createdBlogData == null) return;
+        if (createdBlogData?._id == null) return;
 
         setCacheData("blogsPaginated", (prevData) => {
           if (!prevData) return null;
@@ -84,6 +104,7 @@ const CreateBlogPage: NextPage = () => {
         setCacheData("edit_" + createdBlogData.urlSlug, createdBlogData);
 
         push("/blog/[slug]", `/blog/${createdBlogData.urlSlug}`);
+        setIsRedirecting(true);
       },
     }
   );
@@ -91,16 +112,9 @@ const CreateBlogPage: NextPage = () => {
   const onCorrectSubmit = useCallback<
     (data: BlogEditCreatePostProps) => Promise<Maybe<BlogEditCreatePostProps>>
   >(
-    async (data) => {
-      let { title, lead, content, urlSlug } = data;
-
+    async ({ _id, ...blog }) => {
       return await createBlog({
-        variables: {
-          title,
-          lead,
-          content,
-          urlSlug,
-        },
+        variables: blog,
       });
     },
     [createBlog]
@@ -110,41 +124,44 @@ const CreateBlogPage: NextPage = () => {
 
   const SubmitButton = useCallback<FC>(() => {
     return (
-      <Button
-        marginBottom="5px"
-        variantColor="blue"
-        type="submit"
-        isDisabled={isFetchLoading}
-        isLoading={isFetchLoading}
-      >
-        Create Blog
-      </Button>
+      <>
+        <Button
+          marginBottom="5px"
+          variantColor="blue"
+          type="submit"
+          isDisabled={isFetchLoading}
+          isLoading={isFetchLoading}
+        >
+          Create Blog
+        </Button>
+        <Stack alignSelf="center">
+          {createBlogErrors &&
+            createBlogErrors.map((error, key) => {
+              return (
+                <Alert
+                  textAlign="center"
+                  margin="10px"
+                  status="error"
+                  key={key}
+                  borderRadius="5px"
+                >
+                  <AlertIcon />
+                  <AlertTitle mr={2}>Error!</AlertTitle>
+                  <AlertDescription>{error.message}</AlertDescription>
+                </Alert>
+              );
+            })}
+        </Stack>
+      </>
     );
-  }, [isFetchLoading]);
+  }, [isFetchLoading, createBlogErrors]);
 
-  if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
+  if (isCurrentUserLoading || isRedirecting)
+    return <Spinner size="xl" margin="50px" />;
 
   return (
     <Stack margin="15px">
       <AdminNavigation />
-      <Stack alignSelf="center">
-        {createBlogErrors &&
-          createBlogErrors.map((error, key) => {
-            return (
-              <Alert
-                textAlign="center"
-                margin="10px"
-                status="error"
-                key={key}
-                borderRadius="5px"
-              >
-                <AlertIcon />
-                <AlertTitle mr={2}>Error!</AlertTitle>
-                <AlertDescription>{error.message}</AlertDescription>
-              </Alert>
-            );
-          })}
-      </Stack>
 
       <BlogPostForm
         blog={defaultValues}

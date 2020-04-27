@@ -4,7 +4,7 @@ import slugify from "slugify";
 import { arg, queryType, stringArg } from "@nexus/schema";
 
 import { BlogModel, BlogProps } from "../models";
-import { pageInfoResolver } from "../utils";
+import { pageInfoResolver } from "./pagination";
 
 export const Query = queryType({
   definition(t) {

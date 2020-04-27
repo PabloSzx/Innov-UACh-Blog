@@ -5,6 +5,14 @@ import { PREVIEW_TOKEN } from "../../constants/tokens";
 const PreviewRoute: NextApiHandler = (req, res) => {
   const userAuthorizationToken = req.query.secret || req.headers.authorization;
 
+  if (req.query.clear) {
+    if (req.cookies.__prerender_bypass) {
+      res.clearPreviewData();
+    }
+    res.end();
+    return;
+  }
+
   if (!PREVIEW_TOKEN) {
     res.end("No PREVIEW_TOKEN specified!");
     return;
