@@ -1,11 +1,12 @@
 import { ApolloServer } from "apollo-server-micro";
+import { serialize } from "cookie";
 import { sign, verify } from "jsonwebtoken";
 
 import { schema } from "../../api-lib/schema";
 import {
+  IS_DEVELOPMENT,
   IS_PRODUCTION,
   ONE_WEEK_SECONDS,
-  IS_DEVELOPMENT,
 } from "../../constants";
 import GraphiQLHTML from "../../constants/graphiql.html";
 import { ADMIN_TOKEN, SECRET_TOKEN } from "../../constants/tokens";
@@ -91,11 +92,18 @@ const buildContext = ({
 
     res.setHeader(
       "Set-Cookie",
-      `authorization=${sign(jwtPayload, SECRET_TOKEN, {
-        expiresIn: "7d",
-      })}; HttpOnly; ${
-        IS_PRODUCTION ? "Secure;" : ""
-      } SameSite=Strict; Max-Age=${ONE_WEEK_SECONDS}`
+      serialize(
+        "authorization",
+        sign(jwtPayload, SECRET_TOKEN, {
+          expiresIn: "7d",
+        }),
+        {
+          maxAge: ONE_WEEK_SECONDS,
+          sameSite: "lax",
+          httpOnly: true,
+          secure: IS_PRODUCTION,
+        }
+      )
     );
   };
   const logout = () => {

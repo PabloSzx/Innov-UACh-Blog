@@ -23,6 +23,7 @@
     "@nexus/schema": "^0.13.1",
     "apollo-server-micro": "^2.12.0",
     "babel-plugin-lodash": "^3.3.4",
+    "cookie": "^0.4.1",
     "dataloader": "^2.0.0",
     "date-fns": "^2.12.0",
     "date-fns-tz": "^1.0.10",
@@ -52,11 +53,13 @@
     "react-useportal": "^1.0.13",
     "slugify": "^1.4.0",
     "ts-mongoose": "^0.0.21",
-    "utility-types": "^3.10.0"
+    "utility-types": "^3.10.0",
+    "waait": "^1.0.5"
   },
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
     "@next/bundle-analyzer": "^9.3.6",
+    "@types/cookie": "^0.3.3",
     "@types/graphql-iso-date": "^3.3.3",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash": "^4.14.150",
