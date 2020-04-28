@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
 import { ChangeEvent, FC, useState } from "react";
 
 import { Button, Flex, Input, Spinner, Stack } from "@chakra-ui/core";
@@ -17,6 +18,9 @@ const RebuildComponent: FC = () => {
 
   return (
     <>
+      <Head key={1}>
+        <title>Admin Panel</title>
+      </Head>
       {enableRebuild ? (
         <>
           <Flex width="fit-content">

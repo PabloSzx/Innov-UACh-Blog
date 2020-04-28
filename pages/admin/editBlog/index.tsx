@@ -1,6 +1,7 @@
 import { setCacheData } from "gqless-hooks";
 import { uniqBy } from "lodash";
 import { NextPage } from "next";
+import Head from "next/head";
 import Router from "next/router";
 import { FC, memo } from "react";
 
@@ -134,53 +135,59 @@ const EditBlogListPage: NextPage = () => {
   const blogNodes = blogsPaginated.data?.nodes;
 
   return (
-    <Stack margin="15px">
-      <Spinner
-        hidden={
-          blogsPaginated.fetchState !== "loading" || blogsPaginated.data != null
-        }
-      />
+    <>
+      <Head key={0}>
+        <title>Admin Blog Post List Edit</title>
+      </Head>
+      <Stack margin="15px">
+        <Spinner
+          hidden={
+            blogsPaginated.fetchState !== "loading" ||
+            blogsPaginated.data != null
+          }
+        />
 
-      {blogNodes?.map((blog, index) => {
-        return <BlogBox key={blog._id} blog={blog} index={index + 1} />;
-      })}
+        {blogNodes?.map((blog, index) => {
+          return <BlogBox key={blog._id} blog={blog} index={index + 1} />;
+        })}
 
-      {blogsPaginated.data?.hasNextPage && (
-        <Box>
-          <Button
-            leftIcon="plus-square"
-            variantColor="blue"
-            isDisabled={blogsPaginated.fetchState === "loading"}
-            isLoading={blogsPaginated.fetchState === "loading"}
-            onClick={() => {
-              fetchMore({
-                notifyLoading: true,
-                variables: {
-                  skip: blogsPaginated.data?.nodes.length,
-                },
-                updateQuery(previousResult, fetchMoreResult) {
-                  if (!fetchMoreResult) return previousResult;
+        {blogsPaginated.data?.hasNextPage && (
+          <Box>
+            <Button
+              leftIcon="plus-square"
+              variantColor="blue"
+              isDisabled={blogsPaginated.fetchState === "loading"}
+              isLoading={blogsPaginated.fetchState === "loading"}
+              onClick={() => {
+                fetchMore({
+                  notifyLoading: true,
+                  variables: {
+                    skip: blogsPaginated.data?.nodes.length,
+                  },
+                  updateQuery(previousResult, fetchMoreResult) {
+                    if (!fetchMoreResult) return previousResult;
 
-                  return {
-                    hasNextPage: fetchMoreResult.hasNextPage,
-                    nodes: uniqBy(
-                      [
-                        ...(previousResult?.nodes ?? []),
-                        ...fetchMoreResult.nodes,
-                      ],
+                    return {
+                      hasNextPage: fetchMoreResult.hasNextPage,
+                      nodes: uniqBy(
+                        [
+                          ...(previousResult?.nodes ?? []),
+                          ...fetchMoreResult.nodes,
+                        ],
 
-                      ({ _id }) => _id
-                    ),
-                  };
-                },
-              });
-            }}
-          >
-            Fetch more
-          </Button>
-        </Box>
-      )}
-    </Stack>
+                        ({ _id }) => _id
+                      ),
+                    };
+                  },
+                });
+              }}
+            >
+              Fetch more
+            </Button>
+          </Box>
+        )}
+      </Stack>
+    </>
   );
 };
 

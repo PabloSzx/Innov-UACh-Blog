@@ -169,6 +169,7 @@ export const ExtraBlogPost: FC<{
       _hover={{
         boxShadow: "0px 0px 5px 5px #888",
       }}
+      alignSelf="center"
     >
       <BlogImage image={mainImage} alt={mainImageAlt || title} slug={urlSlug} />
       <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
@@ -202,6 +203,7 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
           alignSelf="center"
           gridRowGap="20px"
           gridColumnGap={["0px", "0px", "0px", "20px"]}
+          transition="all 0.5s"
           gridTemplateColumns={[
             "repeat(1, 1fr)",
             "repeat(1, 1fr)",

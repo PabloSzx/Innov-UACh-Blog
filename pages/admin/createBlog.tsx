@@ -1,6 +1,7 @@
 import { Maybe, setCacheData } from "gqless-hooks";
 import { loremIpsum } from "lorem-ipsum";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC, useCallback, useMemo, useState } from "react";
 
@@ -159,13 +160,18 @@ const CreateBlogPage: NextPage = () => {
     return <Spinner size="xl" margin="50px" />;
 
   return (
-    <Stack margin="15px">
-      <BlogPostForm
-        blog={defaultValues}
-        onCorrectSubmit={onCorrectSubmit}
-        children={SubmitButton}
-      />
-    </Stack>
+    <>
+      <Head key={0}>
+        <title>Admin Blog Post Creation</title>
+      </Head>
+      <Stack margin="15px">
+        <BlogPostForm
+          blog={defaultValues}
+          onCorrectSubmit={onCorrectSubmit}
+          children={SubmitButton}
+        />
+      </Stack>
+    </>
   );
 };
 

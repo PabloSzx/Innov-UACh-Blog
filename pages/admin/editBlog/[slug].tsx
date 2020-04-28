@@ -1,17 +1,18 @@
 import { Maybe, setCacheData } from "gqless-hooks";
 import { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect } from "react";
 
 import { Button, Heading, Spinner, Stack } from "@chakra-ui/core";
 
+import { AdminNavigation } from "../../../src/components/AdminNavigation";
 import {
   BlogEditCreatePostProps,
   BlogPostForm,
 } from "../../../src/components/BlogPostForm";
 import { BlogUpdate, useMutation, useQuery } from "../../../src/graphql";
 import { useAdminAuth } from "../../../src/hooks/adminAuth";
-import { AdminNavigation } from "../../../src/components/AdminNavigation";
 
 export const getServerSideProps: GetServerSideProps<EditBlogPageProps> = async ({
   query: { slug },
@@ -202,6 +203,9 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
 
   return (
     <>
+      <Head key={0}>
+        <title>Admin Edit Blog Post {blog?.title}</title>
+      </Head>
       <Stack margin="15px">
         {blog ? (
           <Heading>

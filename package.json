@@ -12,9 +12,9 @@
   },
   "resolutions": {
     "@types/react": "^16.9.34",
-    "@types/react-dom": "16.9.6",
-    "prettier": "^2.0.5",
-    "caniuse-lite": "^1.0.30001046"
+    "@types/react-dom": "16.9.7",
+    "caniuse-lite": "^1.0.30001046",
+    "prettier": "^2.0.5"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.7.0",
@@ -42,7 +42,7 @@
     "mongodb": "^3.5.6",
     "mongoose": "^5.9.10",
     "ms": "^2.1.2",
-    "next": "^9.3.6-canary.9",
+    "next": "^9.3.6",
     "nprogress": "^0.2.0",
     "p-lazy": "^3.0.0",
     "react": "16.13.1",
@@ -56,20 +56,20 @@
   },
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
-    "@next/bundle-analyzer": "^9.3.5",
+    "@next/bundle-analyzer": "^9.3.6",
     "@types/graphql-iso-date": "^3.3.3",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash": "^4.14.150",
     "@types/markdown-to-jsx": "^6.11.0",
     "@types/micro": "^7.3.3",
-    "@types/mongodb": "^3.5.11",
-    "@types/mongoose": "^5.7.13",
+    "@types/mongodb": "^3.5.14",
+    "@types/mongoose": "^5.7.14",
     "@types/ms": "^0.7.31",
-    "@types/node": "^13.13.2",
+    "@types/node": "^13.13.4",
     "@types/nprogress": "^0.2.0",
     "@types/prettier": "^2.0.0",
     "@types/react": "^16.9.34",
-    "@types/react-dom": "16.9.6",
+    "@types/react-dom": "16.9.7",
     "cross-env": "^7.0.2",
     "prettier": "^2.0.5",
     "typescript": "^3.8.3"
