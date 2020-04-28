@@ -18,9 +18,6 @@ const RebuildComponent: FC = () => {
 
   return (
     <>
-      <Head key={1}>
-        <title>Admin Panel</title>
-      </Head>
       {enableRebuild ? (
         <>
           <Flex width="fit-content">
@@ -86,33 +83,38 @@ const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
   if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
   return (
-    <Stack shouldWrapChildren margin="15px">
-      <Button
-        leftIcon="view"
-        variantColor="cyan"
-        isDisabled={previewModeFetchState === "done"}
-        isLoading={previewModeFetchState === "loading"}
-        onClick={() => {
-          enablePreviewMode();
-        }}
-      >
-        {previewModeFetchState === "done"
-          ? "Preview Mode Active"
-          : "Enable Preview Mode"}
-      </Button>
+    <>
+      <Head key={1}>
+        <title>Admin Panel</title>
+      </Head>
+      <Stack shouldWrapChildren margin="15px">
+        <Button
+          leftIcon="view"
+          variantColor="cyan"
+          isDisabled={previewModeFetchState === "done"}
+          isLoading={previewModeFetchState === "loading"}
+          onClick={() => {
+            enablePreviewMode();
+          }}
+        >
+          {previewModeFetchState === "done"
+            ? "Preview Mode Active"
+            : "Enable Preview Mode"}
+        </Button>
 
-      {hasRebuildUrl && <RebuildComponent />}
+        {hasRebuildUrl && <RebuildComponent />}
 
-      <Button
-        leftIcon="small-close"
-        variantColor="red"
-        onClick={() => {
-          logout();
-        }}
-      >
-        Logout
-      </Button>
-    </Stack>
+        <Button
+          leftIcon="small-close"
+          variantColor="red"
+          onClick={() => {
+            logout();
+          }}
+        >
+          Logout
+        </Button>
+      </Stack>
+    </>
   );
 };
 
