@@ -12,3 +12,10 @@ export const UNAUTHORIZED_ERROR = "Unauthorized operation!";
 export const SITE_URL = process.env.VERCEL_URL || "http://localhost:3000";
 
 export const initialNBlogs = 5;
+
+export const adminPaths = [
+  "/admin",
+  "/admin/createBlog",
+  "/admin/editBlog",
+  "/admin/editBlog/[slug]",
+];

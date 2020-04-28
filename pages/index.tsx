@@ -2,26 +2,25 @@ import { DocumentNode, gql } from "graphql-schema-query";
 import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useRef } from "react";
 
 import {
+  Divider,
+  Grid,
   Heading,
   Image,
   PseudoBox,
   Stack,
   Text,
-  Grid,
-  Divider,
 } from "@chakra-ui/core";
 
 import { executeFromSchema } from "../api-lib/schema";
 import { initialNBlogs } from "../constants";
 import {
-  PreviewIndicator,
   MoreBlogPosts,
+  PreviewIndicator,
 } from "../src/components/DynamicImports";
 import { Markdown } from "../src/components/Markdown";
-
 import { dateToBlogDateString } from "../src/utils";
 
 import type { Query, Blog } from "../src/graphql/generated";
@@ -107,6 +106,53 @@ const BlogImage: FC<{
   );
 };
 
+const FirstBlogPost: FC<{
+  blog: BlogProps["blogList"]["nodes"][number];
+}> = ({
+  blog: { _id, urlSlug, title, createdAt, lead, mainImage, mainImageAlt },
+}) => {
+  {
+    return (
+      <PseudoBox
+        alignSelf="center"
+        key={_id}
+        width={["90vw", "90vw", "600px", "800px"]}
+        margin="10px"
+        padding="20px"
+        fontSize={["1rem", "1.2rem", "1.3rem", "1.6rem"]}
+        transition="all 0.5s"
+        borderRadius="10px"
+        _hover={{
+          boxShadow: "0px 0px 5px 5px #888",
+        }}
+      >
+        <BlogImage
+          image={mainImage}
+          alt={mainImageAlt || title}
+          slug={urlSlug}
+        />
+
+        <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
+          <Heading
+            wordBreak="normal"
+            fontSize={["2.4rem", "2.6rem", "3rem", "3.5rem"]}
+            cursor="pointer"
+            as="a"
+            userSelect="none"
+          >
+            {title}
+          </Heading>
+        </Link>
+        <br />
+        {lead ? (
+          <Markdown marginTop="10px" textAlign="justify" children={lead} />
+        ) : null}
+        <Text marginTop="10px">{dateToBlogDateString(createdAt)}</Text>
+      </PseudoBox>
+    );
+  }
+};
+
 export const ExtraBlogPost: FC<{
   blog: BlogProps["blogList"]["nodes"][number];
 }> = ({
@@ -143,70 +189,13 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
   return (
     <>
       <Head key={1}>
-        <title>Comunidades UACh</title>
+        <title>News</title>
       </Head>
+      {isPreview && <PreviewIndicator />}
       <Stack margin="15px" padding="25px">
-        {isPreview && <PreviewIndicator />}
-        {nodes
-          .slice(0, 1)
-          .map(
-            ({
-              _id,
-              urlSlug,
-              title,
-              createdAt,
-              lead,
-              mainImage,
-              mainImageAlt,
-            }) => {
-              return (
-                <PseudoBox
-                  alignSelf="center"
-                  key={_id}
-                  width={["90vw", "90vw", "600px", "800px"]}
-                  margin="10px"
-                  padding="20px"
-                  fontSize={["1rem", "1.2rem", "1.3rem", "1.6rem"]}
-                  transition="all 0.5s"
-                  borderRadius="10px"
-                  _hover={{
-                    boxShadow: "0px 0px 5px 5px #888",
-                  }}
-                >
-                  <BlogImage
-                    image={mainImage}
-                    alt={mainImageAlt || title}
-                    slug={urlSlug}
-                  />
-
-                  <Link href="/blog/[slug]" as={`/blog/${urlSlug}`} passHref>
-                    <Heading
-                      wordBreak="normal"
-                      fontSize={["2.4rem", "2.6rem", "3rem", "3.5rem"]}
-                      cursor="pointer"
-                      as="a"
-                      userSelect="none"
-                    >
-                      {title}
-                    </Heading>
-                  </Link>
-                  <br />
-                  {lead ? (
-                    <Markdown
-                      marginTop="10px"
-                      textAlign="justify"
-                      children={lead}
-                    />
-                  ) : null}
-                  <Text marginTop="10px">
-                    {dateToBlogDateString(createdAt)}
-                  </Text>
-                </PseudoBox>
-              );
-            }
-          )}
+        {nodes[0] && <FirstBlogPost blog={nodes[0]} />}
         <Divider />
-        <Heading textAlign="center" fontSize="3rem">
+        <Heading textAlign="center" fontSize="3rem" paddingBottom="20px">
           More News
         </Heading>
         <Grid

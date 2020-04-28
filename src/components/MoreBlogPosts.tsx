@@ -1,10 +1,10 @@
-import { FC, useCallback, useState, useMemo } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import usePortal from "react-useportal";
 
 import { Button, Flex } from "@chakra-ui/core";
 
 import { initialNBlogs } from "../../constants";
-import { BlogProps, ExtraBlogPost } from "../../pages/index";
+import { BlogProps, ExtraBlogPost } from "../../pages";
 
 let nSlideState = initialNBlogs;
 
@@ -13,7 +13,14 @@ const nMorePosts = 4;
 export const MoreBlogPosts: FC<{
   blogPosts: BlogProps["blogList"]["nodes"];
 }> = ({ blogPosts }) => {
-  const { Portal } = usePortal();
+  const bindTo = useMemo(() => {
+    return document.querySelector<HTMLDivElement>("#preFooter") || undefined;
+  }, []);
+
+  const { Portal } = usePortal({
+    bindTo,
+  });
+
   const [nSlice, setNSlice] = useState(nSlideState);
 
   const addMorePosts = useCallback(() => {

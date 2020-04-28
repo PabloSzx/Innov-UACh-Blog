@@ -6,7 +6,6 @@ import { FC, memo } from "react";
 
 import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/core";
 
-import { AdminNavigation } from "../../../src/components/AdminNavigation";
 import { Blog, useQuery } from "../../../src/graphql";
 import { useAdminAuth } from "../../../src/hooks/adminAuth";
 
@@ -35,7 +34,8 @@ declare global {
 
 const BlogBox: FC<{
   blog: gqlessSharedCache["blogsPaginated"]["nodes"][number];
-}> = memo(({ blog }) => {
+  index: number;
+}> = memo(({ blog, index }) => {
   return (
     <Box
       border="1px solid black"
@@ -44,6 +44,7 @@ const BlogBox: FC<{
       padding="15px"
       marginBottom="5px"
     >
+      <Text>{index}.</Text>
       <Heading fontSize="2em">{blog.title}</Heading>
       <Heading fontSize="1.5em">/{blog.urlSlug}</Heading>
       <Text>updatedAt: {blog.updatedAt}</Text>
@@ -130,16 +131,18 @@ const EditBlogListPage: NextPage = () => {
 
   if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
+  const blogNodes = blogsPaginated.data?.nodes;
+
   return (
     <Stack margin="15px">
-      <AdminNavigation />
       <Spinner
         hidden={
           blogsPaginated.fetchState !== "loading" || blogsPaginated.data != null
         }
       />
-      {blogsPaginated.data?.nodes.map((blog) => {
-        return <BlogBox key={blog._id} blog={blog} />;
+
+      {blogNodes?.map((blog, index) => {
+        return <BlogBox key={blog._id} blog={blog} index={index + 1} />;
       })}
 
       {blogsPaginated.data?.hasNextPage && (

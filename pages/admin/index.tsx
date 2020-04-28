@@ -1,12 +1,73 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { ChangeEvent, FC, useState } from "react";
 
-import { Button, Stack, Spinner } from "@chakra-ui/core";
+import { Button, Flex, Input, Spinner, Stack } from "@chakra-ui/core";
 
-import { useAdminAuth } from "../../src/hooks/adminAuth";
-import { AdminNavigation } from "../../src/components/AdminNavigation";
+import { REBUILD_HOOK_URL } from "../../constants/tokens";
 import { useMutation } from "../../src/graphql";
+import { useAdminAuth } from "../../src/hooks/adminAuth";
 
-const AdminPage: NextPage = () => {
+interface AdminPageProps {
+  hasRebuildUrl: boolean;
+}
+
+const RebuildComponent: FC = () => {
+  const [enableRebuild, setEnableRebuild] = useState(false);
+  const [adminToken, setAdminToken] = useState("");
+
+  return (
+    <>
+      {enableRebuild ? (
+        <>
+          <Flex width="fit-content">
+            <Input
+              width="fit-content"
+              type="password"
+              value={adminToken}
+              onChange={({
+                target: { value },
+              }: ChangeEvent<HTMLInputElement>) => {
+                setAdminToken(value);
+              }}
+              placeholder="Re-enter the admin token"
+            />
+            <Button
+              isDisabled={adminToken.length < 20}
+              variantColor="blue"
+              leftIcon="repeat"
+              onClick={() => {
+                window.open(`/api/rebuild?secret=${adminToken}`, "_blank");
+                setEnableRebuild(false);
+              }}
+            >
+              Rebuild
+            </Button>
+          </Flex>
+        </>
+      ) : (
+        <Button
+          variantColor="blue"
+          leftIcon="repeat"
+          onClick={() => {
+            setEnableRebuild(true);
+          }}
+        >
+          Rebuild
+        </Button>
+      )}
+    </>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<AdminPageProps> = async () => {
+  return {
+    props: {
+      hasRebuildUrl: !!REBUILD_HOOK_URL,
+    },
+  };
+};
+
+const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
   const { isCurrentUserLoading, logout } = useAdminAuth({
     requireAdmin: true,
   });
@@ -22,18 +83,21 @@ const AdminPage: NextPage = () => {
 
   return (
     <Stack shouldWrapChildren margin="15px">
-      <AdminNavigation />
-
       <Button
         leftIcon="view"
         variantColor="cyan"
+        isDisabled={previewModeFetchState === "done"}
         isLoading={previewModeFetchState === "loading"}
         onClick={() => {
           enablePreviewMode();
         }}
       >
-        Enable Preview Mode
+        {previewModeFetchState === "done"
+          ? "Preview Mode Active"
+          : "Enable Preview Mode"}
       </Button>
+
+      {hasRebuildUrl && <RebuildComponent />}
 
       <Button
         leftIcon="small-close"

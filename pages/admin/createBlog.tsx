@@ -14,7 +14,6 @@ import {
   Stack,
 } from "@chakra-ui/core";
 
-import { AdminNavigation } from "../../src/components/AdminNavigation";
 import {
   BlogEditCreatePostProps,
   BlogPostForm,
@@ -161,8 +160,6 @@ const CreateBlogPage: NextPage = () => {
 
   return (
     <Stack margin="15px">
-      <AdminNavigation />
-
       <BlogPostForm
         blog={defaultValues}
         onCorrectSubmit={onCorrectSubmit}

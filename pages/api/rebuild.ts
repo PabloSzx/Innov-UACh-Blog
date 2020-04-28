@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
-import { REBUILD_HOOK_URL, ADMIN_TOKEN } from "../../constants/tokens";
+
+import { ADMIN_TOKEN, REBUILD_HOOK_URL } from "../../constants/tokens";
 
 const RebuildNext: NextApiHandler = (req, res) => {
   if (!REBUILD_HOOK_URL) {

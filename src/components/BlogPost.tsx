@@ -24,7 +24,9 @@ export type BlogPostProps = {
 };
 
 export const BlogPost: FC<BlogPostProps> = memo(
-  ({ blog: { title, lead, content, updatedAt, createdAt, mainImage } }) => {
+  ({
+    blog: { title, lead, content, updatedAt, createdAt, mainImage, author },
+  }) => {
     const marginSides = ["10px", "20px", "100px", "150px"];
     return (
       <Stack fontSize="1.2em">
@@ -42,10 +44,15 @@ export const BlogPost: FC<BlogPostProps> = memo(
         <Text
           marginTop="20px"
           marginLeft={["10px", "20px", "20px"]}
-          paddingBottom="30px"
+          paddingBottom="20px"
         >
           {dateToBlogDateString(createdAt)}
         </Text>
+        {author ? (
+          <Text paddingBottom="20px" marginLeft={["10px", "20px"]}>
+            By <b>{author}</b>
+          </Text>
+        ) : null}
         {lead ? (
           <Markdown
             textAlign="justify"

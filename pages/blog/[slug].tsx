@@ -4,12 +4,12 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Stack } from "@chakra-ui/core";
 
 import { executeFromSchema } from "../../api-lib/schema";
+import { SITE_URL } from "../../constants";
 import { BlogPost, BlogPostProps } from "../../src/components/BlogPost";
 import { PreviewIndicator } from "../../src/components/DynamicImports";
 import { BlogMetaDataHead } from "../../src/components/MetaTags";
 
 import type { Query } from "../../src/graphql/generated";
-import { SITE_URL } from "../../constants";
 const BlogGql: DocumentNode<
   BlogPostProps,
   {
