@@ -8,10 +8,18 @@ const navigationPaths = ["/", "/community", "/project", "/faq"] as const;
 export const Navigation: FC = () => {
   const { pathname, push } = useRouter();
 
-  const onTabChange = useCallback<(n: number) => void>((index) => {
-    const path = navigationPaths[index];
-    if (path) push(path);
-  }, []);
+  const onTabChange = useCallback<(n: number) => void>(
+    (index) => {
+      const path = navigationPaths[index];
+      if (path === pathname) {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } else if (path) push(path);
+    },
+    [pathname]
+  );
 
   let index = navigationPaths.indexOf(
     pathname as typeof navigationPaths[number]
@@ -35,6 +43,7 @@ export const Navigation: FC = () => {
       border="2px solid #999"
       borderBottomLeftRadius="20px"
       borderBottomRightRadius="20px"
+      zIndex={100}
     >
       <Tabs
         variantColor="green"

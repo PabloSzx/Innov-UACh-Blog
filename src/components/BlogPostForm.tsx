@@ -50,7 +50,7 @@ export const PreviewBlog: FC = memo(() => {
         lead === previewState.lead &&
         title === previewState.title &&
         mainImage === previewState.mainImage &&
-        author === author
+        author === previewState.author
       ) {
         return;
       }
