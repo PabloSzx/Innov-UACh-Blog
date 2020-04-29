@@ -16,6 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/core";
 
+import { AdminNavigation } from "../../src/components/AdminNavigation";
 import {
   BlogEditCreatePostProps,
   BlogPostForm,
@@ -170,6 +171,7 @@ const CreateBlogPage: NextPage = () => {
 
   return (
     <>
+      <AdminNavigation />
       <Head key={0}>
         <title>Admin Blog Post Creation</title>
       </Head>

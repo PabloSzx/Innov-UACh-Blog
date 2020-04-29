@@ -5,6 +5,7 @@ import { ChangeEvent, FC, useState } from "react";
 import { Button, Flex, Input, Spinner, Stack } from "@chakra-ui/core";
 
 import { REBUILD_HOOK_URL } from "../../constants/tokens";
+import { AdminNavigation } from "../../src/components/AdminNavigation";
 import { useMutation } from "../../src/graphql";
 import { useAdminAuth } from "../../src/hooks/adminAuth";
 
@@ -87,6 +88,7 @@ const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
       <Head key={1}>
         <title>Admin Panel</title>
       </Head>
+      <AdminNavigation />
       <Stack shouldWrapChildren margin="15px">
         <Button
           leftIcon="view"

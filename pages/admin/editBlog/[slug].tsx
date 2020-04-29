@@ -211,6 +211,7 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
 
   return (
     <>
+      <AdminNavigation />
       <Head key={0}>
         <title>Admin Edit Blog Post {blog?.title}</title>
       </Head>

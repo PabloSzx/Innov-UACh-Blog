@@ -4,13 +4,9 @@ import { FC, memo, useCallback } from "react";
 import { Tab, TabList, Tabs } from "@chakra-ui/core";
 
 import { adminPaths } from "../../constants";
-import { useAdminAuth } from "../hooks/adminAuth";
 
 export const AdminNavigation: FC = memo(() => {
   const { pathname, push } = useRouter();
-  const { isCurrentUserLoading } = useAdminAuth({
-    requireAdmin: true,
-  });
 
   const onTabChange = useCallback<(n: number) => void>(
     (index) => {
@@ -26,8 +22,6 @@ export const AdminNavigation: FC = memo(() => {
   );
 
   let index = adminPaths.indexOf(pathname);
-
-  if (isCurrentUserLoading || index === -1) return null;
 
   return (
     <nav>

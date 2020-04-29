@@ -7,7 +7,8 @@ import { FC, memo } from "react";
 
 import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/core";
 
-import { Blog, useQuery, useMutation } from "../../../src/graphql";
+import { AdminNavigation } from "../../../src/components/AdminNavigation";
+import { Blog, useMutation, useQuery } from "../../../src/graphql";
 import { useAdminAuth } from "../../../src/hooks/adminAuth";
 
 declare global {
@@ -177,6 +178,7 @@ const EditBlogListPage: NextPage = () => {
 
   return (
     <>
+      <AdminNavigation />
       <Head key={0}>
         <title>Admin Blog Post List Edit</title>
       </Head>

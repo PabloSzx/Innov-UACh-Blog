@@ -7,7 +7,6 @@ import NProgress from "nprogress";
 
 import { CSSReset, theme, ThemeProvider } from "@chakra-ui/core";
 
-import { AdminNavigation } from "../src/components/AdminNavigation";
 import { Footer } from "../src/components/Footer";
 import { Navigation } from "../src/components/Navigation";
 
@@ -24,7 +23,6 @@ export default function ({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={customTheme}>
       <CSSReset />
       <Navigation />
-      <AdminNavigation />
       <Component {...pageProps} />
       <Footer />
     </ThemeProvider>
