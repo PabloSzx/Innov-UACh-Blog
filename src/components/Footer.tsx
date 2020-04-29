@@ -1,7 +1,17 @@
 import { FC, memo, useMemo } from "react";
+import ProgressiveImage from "react-progressive-image";
 import { useWindowScroll, useWindowSize } from "react-use";
 
-import { Box, Divider, Flex, Icon, Image, Stack, Text } from "@chakra-ui/core";
+import {
+  Box,
+  Divider,
+  Flex,
+  Icon,
+  Image,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/core";
 
 const ScrollToTop: FC = () => {
   const { height } = useWindowSize(undefined, 1000);
@@ -44,71 +54,131 @@ export const Footer: FC = memo(() => {
       <Stack
         alignSelf="flex-end"
         justifySelf="flex-end"
-        marginTop="auto"
         pos="relative"
         bottom={0}
         alignItems="center"
         paddingTop="20px"
       >
         <Flex wrap="wrap" align="center" justify="center">
-          <Image
-            background="white"
-            borderRadius="10px"
-            objectFit="contain"
-            maxWidth="250px"
-            alt="logo_uach"
-            src="/logos/logo_uach.jpg"
-          />
-          <Image
-            background="white"
-            borderRadius="10px"
-            objectFit="contain"
-            maxWidth="250px"
-            alt="logo_uach"
-            src="/logos/logo_info.png"
-          />
+          <ProgressiveImage src="/logos/logo_uach.jpg" placeholder="">
+            {(_src: string, loading: boolean) => {
+              return (
+                <Skeleton
+                  margin="5px"
+                  borderRadius="15px"
+                  height="65px"
+                  width="250px"
+                  isLoaded={!loading}
+                >
+                  <Image
+                    background="white"
+                    borderRadius="10px"
+                    objectFit="contain"
+                    maxWidth="250px"
+                    alt="logo_uach"
+                    src="/logos/logo_uach.jpg"
+                  />
+                </Skeleton>
+              );
+            }}
+          </ProgressiveImage>
+
+          <ProgressiveImage src="/logos/logo_info.png" placeholder="">
+            {(_src: string, loading: boolean) => {
+              return (
+                <Skeleton
+                  margin="5px"
+                  borderRadius="15px"
+                  height="100px"
+                  width="250px"
+                  isLoaded={!loading}
+                >
+                  <Image
+                    background="white"
+                    borderRadius="10px"
+                    objectFit="contain"
+                    maxWidth="250px"
+                    alt="logo_informatica"
+                    src="/logos/logo_info.png"
+                  />
+                </Skeleton>
+              );
+            }}
+          </ProgressiveImage>
         </Flex>
         <Flex>
-          <Image
-            background="white"
-            borderRadius="10px"
-            objectFit="contain"
-            maxWidth="200px"
-            alt="logo_uach"
-            src="/logos/logo_dacic.png"
-          />
-          <Image
-            background="white"
-            borderRadius="10px"
-            objectFit="contain"
-            maxWidth="200px"
-            alt="logo_uach"
-            src="/logos/logo_innoving.png"
-          />
+          <ProgressiveImage src="/logos/logo_dacic.png" placeholder="">
+            {(_src: string, loading: boolean) => {
+              return (
+                <Skeleton
+                  margin="5px"
+                  borderRadius="15px"
+                  height="150px"
+                  width="180px"
+                  isLoaded={!loading}
+                >
+                  <Image
+                    background="white"
+                    borderRadius="10px"
+                    objectFit="contain"
+                    maxWidth="200px"
+                    alt="logo_dacic"
+                    src="/logos/logo_dacic.png"
+                  />
+                </Skeleton>
+              );
+            }}
+          </ProgressiveImage>
+
+          <ProgressiveImage src="/logos/logo_innoving.png" placeholder="">
+            {(_src: string, loading: boolean) => {
+              return (
+                <Skeleton
+                  margin="5px"
+                  borderRadius="15px"
+                  height="150px"
+                  width="200px"
+                  isLoaded={!loading}
+                >
+                  <Image
+                    background="white"
+                    borderRadius="10px"
+                    objectFit="contain"
+                    maxWidth="200px"
+                    alt="logo_innoving"
+                    src="/logos/logo_innoving.png"
+                  />
+                </Skeleton>
+              );
+            }}
+          </ProgressiveImage>
         </Flex>
 
+        <Text
+          maxWidth={["300px", "350px", "400px", "450px"]}
+          textAlign="justify"
+        >
+          <b>Proyecto PIDU:</b> Comunidades de práctica como fomento del
+          aprendizaje colaborativo y la vinculación con la sociedad de los
+          estudiantes de Ingeniería Civil en Informática
+        </Text>
         <Stack
           marginTop="20px"
           id="contact_us"
           background="#777"
           borderTopLeftRadius="25px"
           borderTopRightRadius="25px"
-          paddingTop="20px"
+          paddingTop="10px"
           paddingLeft="20px"
           paddingRight="20px"
           paddingBottom="5px"
           color="white"
           alignItems="center"
+          textAlign="center"
         >
-          <Text
-            maxWidth={["300px", "350px", "400px", "450px"]}
-            textAlign="justify"
-          >
-            <b>Proyecto PIDU:</b> "Comunidades de práctica como fomento del
-            aprendizaje colaborativo y la vinculación con la sociedad de los
-            estudiantes de Ingeniería Civil en Informática"
+          <Text fontWeight="bold" fontSize="1.2em">
+            Contacto
           </Text>
-          <Text fontWeight="bold">Contacto</Text>
           <Text>Dr. Cristian Olivares</Text>
           <Flex alignItems="center">
             <Icon name="email" marginRight="10px" />

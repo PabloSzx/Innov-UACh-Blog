@@ -144,9 +144,7 @@ const FirstBlogPost: FC<{
           </Heading>
         </Link>
         <br />
-        {lead ? (
-          <Markdown marginTop="10px" textAlign="justify" children={lead} />
-        ) : null}
+        {lead ? <Markdown marginTop="10px" children={lead} /> : null}
         <Text marginTop="10px">{dateToBlogDateString(createdAt)}</Text>
       </PseudoBox>
     );
@@ -178,9 +176,7 @@ export const ExtraBlogPost: FC<{
         </Heading>
       </Link>
       <br />
-      {lead ? (
-        <Markdown marginTop="10px" textAlign="justify" children={lead} />
-      ) : null}
+      {lead ? <Markdown marginTop="10px" children={lead} /> : null}
       <Text marginTop="10px">{dateToBlogDateString(createdAt)}</Text>
     </PseudoBox>
   );

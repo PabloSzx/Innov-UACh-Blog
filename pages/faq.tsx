@@ -22,7 +22,7 @@ const FAQPage: NextPage = () => {
         <Accordion defaultIndex={-1} allowMultiple={false}>
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por comunidad de práctica?
               </Heading>
             </AccordionHeader>
@@ -39,7 +39,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por territorio?
               </Heading>
             </AccordionHeader>
@@ -54,7 +54,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por software territorial?
               </Heading>
             </AccordionHeader>
@@ -70,7 +70,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por contexto territorial?
               </Heading>
             </AccordionHeader>
@@ -88,7 +88,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por pertinencia de la tecnología?
               </Heading>
             </AccordionHeader>
@@ -103,7 +103,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por factibilidad de la tecnología?
               </Heading>
             </AccordionHeader>
@@ -121,7 +121,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por relevancia de la tecnología?
               </Heading>
             </AccordionHeader>
@@ -136,7 +136,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Cómo podemos describir las habilidades individuales de los
                 miembros del equipo?
               </Heading>
@@ -153,7 +153,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por beneficios del trabajo en comunidad?
               </Heading>
             </AccordionHeader>
@@ -169,7 +169,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por objetivo de aprendizaje?
               </Heading>
             </AccordionHeader>
@@ -185,7 +185,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por objetivo de desarrollo?
               </Heading>
             </AccordionHeader>
@@ -201,7 +201,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué se entiende por estrategia de organización?
               </Heading>
             </AccordionHeader>
@@ -217,7 +217,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué sucede si, de adjudicarnos los fondos, necesitamos
                 modificar la tecnología?
               </Heading>
@@ -235,7 +235,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué sucede si, de adjudicarnos los fondos, necesitamos
                 modificar los objetivos de aprendizaje y/o desarrollo?
               </Heading>
@@ -253,7 +253,7 @@ const FAQPage: NextPage = () => {
 
           <AccordionItem>
             <AccordionHeader>
-              <Heading fontSize="1.5em" as="h2">
+              <Heading fontSize="1.5em" textAlign="start" as="h2">
                 ¿Qué sucede si, de adjudicarnos los fondos, necesitamos
                 modificar la estrategia de organización?
               </Heading>

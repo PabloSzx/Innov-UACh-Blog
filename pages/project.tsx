@@ -9,12 +9,7 @@ const ProjectPage: NextPage = () => {
       <Head key={1}>
         <title>Project</title>
       </Head>
-      <Stack
-        paddingLeft="35px"
-        paddingRight="35px"
-        textAlign="justify"
-        fontSize="1.3rem"
-      >
+      <Stack paddingLeft="35px" paddingRight="35px" fontSize="1.3rem">
         <Heading as="h1" padding="20px">
           Comunidades de práctica como fomento del aprendizaje colaborativo y la
           vinculación con la sociedad de los estudiantes de Ingeniería Civil en
@@ -24,14 +19,14 @@ const ProjectPage: NextPage = () => {
           DACIC - Innoving 2030
         </Text>
 
-        <Text>
+        <Text textAlign="justify">
           La sociedad actual atraviesa periodos de resignificación que imponen a
           los nuevos profesionales habilidades de adaptación continua al cambio,
           tanto técnicos como sociales, y participación activa en el proceso de
           construcción de las normas y saberes que tomarán parte activa de en
           cada periodo.
         </Text>
-        <Text>
+        <Text textAlign="justify">
           Por lo tanto, se propone la construcción de comunidades de práctica
           que promuevan el aprendizaje colaborativo a través de la práctica y
           con significación dada por la vinculación directa con la sociedad y,
@@ -41,7 +36,7 @@ const ProjectPage: NextPage = () => {
           dinámico y turbulento.
         </Text>
         <Text>Para ello, se propone</Text>
-        <List as="ol" styleType="decimal">
+        <List as="ol" styleType="decimal" spacing="10px">
           <ListItem>
             Diseñar un concurso abierto a estudiantes de Ingeniería Civil en
             Informática, que les provea de fondos para la conformación y

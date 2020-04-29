@@ -14,7 +14,6 @@ const CommunityPage: NextPage = () => {
         margin="15px"
         shouldWrapChildren
         spacing={{ padding: "40px" }}
-        textAlign="justify"
         fontSize="1.5rem"
         padding="25px"
       >

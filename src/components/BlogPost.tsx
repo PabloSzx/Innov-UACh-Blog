@@ -59,7 +59,6 @@ export const BlogPost: FC<BlogPostProps> = memo(
         ) : null}
         {lead ? (
           <Markdown
-            textAlign="justify"
             marginLeft={marginSides}
             marginRight={marginSides}
             children={lead}
@@ -68,7 +67,6 @@ export const BlogPost: FC<BlogPostProps> = memo(
         <Box padding="15px" />
 
         <Markdown
-          textAlign="justify"
           marginLeft={marginSides}
           marginRight={marginSides}
           children={content}
