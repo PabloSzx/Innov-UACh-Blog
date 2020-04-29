@@ -2,7 +2,7 @@ import { DocumentNode, gql } from "graphql-schema-query";
 import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { FC, useRef } from "react";
+import { FC } from "react";
 
 import {
   Divider,
@@ -116,7 +116,7 @@ const FirstBlogPost: FC<{
       <PseudoBox
         alignSelf="center"
         key={_id}
-        width={["90vw", "90vw", "600px", "800px"]}
+        width={["90vw", "90vw", "600px", "900px"]}
         margin="10px"
         padding="20px"
         fontSize={["1rem", "1.2rem", "1.3rem", "1.6rem"]}
@@ -187,36 +187,46 @@ export const ExtraBlogPost: FC<{
 };
 
 const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
+  const firstBlog = nodes[0];
+  const afterFirstBlogNodes = nodes.slice(1, initialNBlogs);
+
   return (
     <>
       <Head key={1}>
-        <title>News</title>
+        <title>Noticias</title>
       </Head>
       {isPreview && <PreviewIndicator />}
       <Stack margin="15px" padding="25px">
-        {nodes[0] && <FirstBlogPost blog={nodes[0]} />}
+        {firstBlog && <FirstBlogPost blog={nodes[0]} />}
         <Divider />
-        <Heading textAlign="center" fontSize="3rem" paddingBottom="20px">
-          More News
-        </Heading>
-        <Grid
-          alignSelf="center"
-          gridRowGap="20px"
-          gridColumnGap={["0px", "0px", "0px", "20px"]}
-          transition="all 0.5s"
-          gridTemplateColumns={[
-            "repeat(1, 1fr)",
-            "repeat(1, 1fr)",
-            "repeat(2, 1fr)",
-            "repeat(2, 1fr)",
-          ]}
-          justifyContent="space-around"
-        >
-          {nodes.slice(1, initialNBlogs).map((blog) => {
-            return <ExtraBlogPost key={blog._id} blog={blog} />;
-          })}
-          {nodes.length > initialNBlogs && <MoreBlogPosts blogPosts={nodes} />}
-        </Grid>
+        {afterFirstBlogNodes.length ? (
+          <>
+            <Heading textAlign="center" fontSize="3rem" paddingBottom="20px">
+              Más noticias
+            </Heading>
+            <Grid
+              alignSelf="center"
+              gridRowGap="20px"
+              gridColumnGap={["0px", "0px", "0px", "20px"]}
+              transition="all 0.5s"
+              gridTemplateColumns={[
+                "repeat(1, 1fr)",
+                "repeat(1, 1fr)",
+                "repeat(2, 1fr)",
+                "repeat(2, 1fr)",
+              ]}
+              justifyContent="space-around"
+            >
+              {afterFirstBlogNodes.map((blog) => {
+                return <ExtraBlogPost key={blog._id} blog={blog} />;
+              })}
+
+              {nodes.length > initialNBlogs && (
+                <MoreBlogPosts blogPosts={nodes} />
+              )}
+            </Grid>
+          </>
+        ) : null}
       </Stack>
     </>
   );

@@ -73,6 +73,7 @@ scalar DateTime
 
 type Mutation {
   createBlog(blog: BlogCreate!): Blog!
+  deleteBlog(blog: ObjectId!): Boolean!
   enablePreviewMode: Boolean!
   login(token: String!): Boolean!
   logout: Boolean!

@@ -7,7 +7,7 @@ import { FC, memo } from "react";
 
 import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/core";
 
-import { Blog, useQuery } from "../../../src/graphql";
+import { Blog, useQuery, useMutation } from "../../../src/graphql";
 import { useAdminAuth } from "../../../src/hooks/adminAuth";
 
 declare global {
@@ -37,6 +37,33 @@ const BlogBox: FC<{
   blog: gqlessSharedCache["blogsPaginated"]["nodes"][number];
   index: number;
 }> = memo(({ blog, index }) => {
+  const blogId = blog._id;
+  const [deleteBlog, { fetchState: deleteFetchState }] = useMutation(
+    ({ deleteBlog }, { blogId }) => {
+      return deleteBlog({
+        blog: blogId,
+      });
+    },
+    {
+      variables: {
+        blogId,
+      },
+      onCompleted(blogWasDeleted) {
+        if (!blogWasDeleted) return;
+
+        setCacheData("blogsPaginated", (prevData) => {
+          if (prevData == null) return prevData;
+
+          return {
+            hasNextPage: prevData.hasNextPage,
+            nodes: prevData.nodes.filter((blog) => {
+              return blog._id !== blogId;
+            }),
+          };
+        });
+      },
+    }
+  );
   return (
     <Box
       border="1px solid black"
@@ -61,7 +88,21 @@ const BlogBox: FC<{
           );
         }}
       >
-        Edit Blog
+        Edit Blog Post
+      </Button>
+      <Button
+        marginLeft="5px"
+        variantColor="red"
+        leftIcon="delete"
+        isLoading={deleteFetchState === "loading"}
+        onClick={() => {
+          const ok = window.confirm(
+            `Are you sure you want to delete "${blog.title}"?`
+          );
+          if (ok) deleteBlog();
+        }}
+      >
+        Delete Blog Post
       </Button>
     </Box>
   );

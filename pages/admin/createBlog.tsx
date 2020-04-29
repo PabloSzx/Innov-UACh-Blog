@@ -13,6 +13,7 @@ import {
   Button,
   Spinner,
   Stack,
+  useToast,
 } from "@chakra-ui/core";
 
 import {
@@ -48,6 +49,8 @@ const CreateBlogPage: NextPage = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const { push } = useRouter();
+
+  const toast = useToast();
 
   const [
     createBlog,
@@ -93,6 +96,12 @@ const CreateBlogPage: NextPage = () => {
       onCompleted(createdBlogData) {
         if (createdBlogData?._id == null) return;
 
+        toast({
+          title: "Blog Post Created!",
+          status: "success",
+          description: "You are being redirected...",
+          duration: 5000,
+        });
         setCacheData("blogsPaginated", (prevData) => {
           if (!prevData) return null;
 

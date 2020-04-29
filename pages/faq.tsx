@@ -15,10 +15,10 @@ const FAQPage: NextPage = () => {
   return (
     <>
       <Head key={1}>
-        <title>Frequently Asked Questions</title>
+        <title>Preguntas frecuentes</title>
       </Head>
       <Stack marginTop="20px" paddingLeft="25px" paddingRight="25px">
-        <Heading paddingBottom="20px">Frequently Asked Questions</Heading>
+        <Heading paddingBottom="20px">Preguntas frecuentes</Heading>
         <Accordion defaultIndex={-1} allowMultiple={false}>
           <AccordionItem>
             <AccordionHeader>

@@ -8,9 +8,6 @@ export const mongooseConection = mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    reconnectInterval: 500,
-    reconnectTries: 1000,
-    autoReconnect: true,
     poolSize: 1,
   }
 );

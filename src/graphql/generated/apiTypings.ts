@@ -189,6 +189,7 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     createBlog: NexusGenRootTypes["Blog"]; // Blog!
+    deleteBlog: boolean; // Boolean!
     enablePreviewMode: boolean; // Boolean!
     login: boolean; // Boolean!
     logout: boolean; // Boolean!
@@ -216,6 +217,10 @@ export interface NexusGenArgTypes {
     createBlog: {
       // args
       blog: NexusGenInputs["BlogCreate"]; // BlogCreate!
+    };
+    deleteBlog: {
+      // args
+      blog: ObjectId; // ObjectId!
     };
     login: {
       // args

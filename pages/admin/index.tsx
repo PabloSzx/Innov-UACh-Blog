@@ -96,6 +96,7 @@ const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
           onClick={() => {
             enablePreviewMode();
           }}
+          title="You can disable it clicking on the Preview Indicator inside the page itself"
         >
           {previewModeFetchState === "done"
             ? "Preview Mode Active"
@@ -108,7 +109,8 @@ const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
           leftIcon="small-close"
           variantColor="red"
           onClick={() => {
-            logout();
+            const ok = window.confirm("Are you sure you want to logout?");
+            if (ok) logout();
           }}
         >
           Logout

@@ -44,7 +44,7 @@ export const Mutation = mutationType({
         { blog: { urlSlug, ...blog } },
         { isAdmin, setPreviewData }
       ) {
-        if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
+        if (!isAdmin()) throw Error(UNAUTHORIZED_ERROR);
 
         const createdBlog = await BlogModel.create({
           urlSlug: slugify(urlSlug, {
@@ -56,6 +56,19 @@ export const Mutation = mutationType({
         setPreviewData("");
 
         return createdBlog;
+      },
+    });
+    t.field("deleteBlog", {
+      type: "Boolean",
+      args: {
+        blog: "ObjectId",
+      },
+      async resolve(_root, { blog }, { isAdmin }) {
+        if (!isAdmin()) throw Error(UNAUTHORIZED_ERROR);
+
+        const removedBlog = await BlogModel.findByIdAndRemove(blog);
+
+        return Boolean(removedBlog);
       },
     });
     t.field("updateBlog", {
@@ -81,7 +94,7 @@ export const Mutation = mutationType({
         },
         { isAdmin, setPreviewData }
       ) {
-        if (!isAdmin) throw Error(UNAUTHORIZED_ERROR);
+        if (!isAdmin()) throw Error(UNAUTHORIZED_ERROR);
 
         const updatedBlog = await BlogModel.findByIdAndUpdate(
           _id,

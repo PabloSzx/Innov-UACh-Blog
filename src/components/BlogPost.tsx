@@ -28,6 +28,10 @@ export const BlogPost: FC<BlogPostProps> = memo(
     blog: { title, lead, content, updatedAt, createdAt, mainImage, author },
   }) => {
     const marginSides = ["10px", "20px", "100px", "150px"];
+
+    const createdAtString = dateToBlogDateString(createdAt);
+    const updatedAtString = dateToBlogDateString(updatedAt);
+
     return (
       <Stack fontSize="1.2em">
         {mainImage ? (
@@ -46,11 +50,11 @@ export const BlogPost: FC<BlogPostProps> = memo(
           marginLeft={["10px", "20px", "20px"]}
           paddingBottom="20px"
         >
-          {dateToBlogDateString(createdAt)}
+          {createdAtString}
         </Text>
         {author ? (
           <Text paddingBottom="20px" marginLeft={["10px", "20px"]}>
-            By <b>{author}</b>
+            Por <b>{author}</b>
           </Text>
         ) : null}
         {lead ? (
@@ -70,9 +74,9 @@ export const BlogPost: FC<BlogPostProps> = memo(
           children={content}
         />
 
-        {updatedAt !== createdAt && (
+        {updatedAtString !== createdAtString && (
           <Text margin={["10px", "20px", "20px"]} marginTop="20px">
-            Last updated {dateToBlogDateString(updatedAt)}
+            Última modificación {updatedAtString}
           </Text>
         )}
       </Stack>

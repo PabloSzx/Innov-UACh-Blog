@@ -46,34 +46,36 @@ export const Navigation: FC = () => {
       zIndex={100}
     >
       <Tabs
+        flexWrap="wrap"
+        overflowWrap="normal"
         variantColor="green"
         variant="solid-rounded"
         index={index}
         onChange={onTabChange}
       >
-        <TabList>
+        <TabList flexWrap="wrap" justifyContent="center">
           <Tab>
             <a href={navigationPaths[0]} onClick={preventDefault}>
-              Home
+              Noticias
             </a>
           </Tab>
-          <Tab>
-            <a href={navigationPaths[1]} onClick={preventDefault}>
-              Community
-            </a>
+          <Tab disabled={true}>
+            {/* <a href={navigationPaths[1]} onClick={preventDefault}> */}
+            Comunidad
+            {/* </a> */}
           </Tab>
           <Tab>
             <a href={navigationPaths[2]} onClick={preventDefault}>
-              Project
+              Proyecto
             </a>
           </Tab>
           <Tab>
             <a href={navigationPaths[3]} onClick={preventDefault}>
-              FAQ
+              Preguntas Frecuentes
             </a>
           </Tab>
           <Tab>
-            <a href="#footer">Contact us</a>
+            <a href="#contact_us">Contacto</a>
           </Tab>
         </TabList>
       </Tabs>

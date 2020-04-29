@@ -274,6 +274,20 @@ export const schema = {
             false
           );
         },
+        get deleteBlog() {
+          return new FieldNode(
+            schema.Boolean,
+            new Arguments(
+              {
+                get blog() {
+                  return new ArgumentsField(schema.ObjectId, false);
+                },
+              },
+              true
+            ),
+            false
+          );
+        },
         get updateBlog() {
           return new FieldNode(
             schema.Blog,

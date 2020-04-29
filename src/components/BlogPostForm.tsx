@@ -165,8 +165,8 @@ export const BlogPostForm: FC<{
                 message: "It should be at least 3 characters",
               },
               maxLength: {
-                value: 50,
-                message: "It should be at most 50 characters",
+                value: 120,
+                message: "It should be at most 120 characters",
               },
             })}
           />
@@ -263,8 +263,8 @@ export const BlogPostForm: FC<{
             name="metaDescription"
             ref={register({
               maxLength: {
-                value: 100,
-                message: "This description should be at most 100 characters",
+                value: 150,
+                message: "This description should be at most 150 characters",
               },
             })}
           />

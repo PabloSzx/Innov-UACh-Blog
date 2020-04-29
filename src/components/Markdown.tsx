@@ -1,17 +1,30 @@
 import MarkdownToJSX, { MarkdownOptions } from "markdown-to-jsx";
 import { FC, memo } from "react";
 
-import { Box, BoxProps, Heading, Image, Stack, Text } from "@chakra-ui/core";
+import {
+  Box,
+  Divider,
+  BoxProps,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  Link,
+  Icon,
+} from "@chakra-ui/core";
 
 const markdownOptions: MarkdownOptions = {
   overrides: {
     Text,
     Stack,
+    Divider,
     Image,
     Box,
+    Icon,
     Heading,
     p: Text,
     img: Image,
+    Link,
   },
 };
 

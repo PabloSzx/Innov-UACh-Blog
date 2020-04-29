@@ -202,6 +202,7 @@ type t_Mutation = FieldsType<
     logout: t_Boolean;
     login: FieldsTypeArg<{ token: string }, t_Boolean>;
     createBlog: FieldsTypeArg<{ blog: BlogCreate }, t_Blog>;
+    deleteBlog: FieldsTypeArg<{ blog: any }, t_Boolean>;
     updateBlog: FieldsTypeArg<{ blog: BlogUpdate }, t_Blog | null>;
   },
   Extension<"Mutation">

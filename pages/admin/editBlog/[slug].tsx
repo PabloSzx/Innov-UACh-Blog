@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect } from "react";
 
-import { Button, Heading, Spinner, Stack } from "@chakra-ui/core";
+import { Button, Heading, Spinner, Stack, useToast } from "@chakra-ui/core";
 
 import { AdminNavigation } from "../../../src/components/AdminNavigation";
 import {
@@ -88,6 +88,8 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
     }
   );
 
+  const toast = useToast();
+
   const [updateBlog, { fetchState: updateFetchState }] = useMutation(
     (
       { updateBlog },
@@ -133,6 +135,12 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
       sharedCacheId,
       onCompleted(updatedBlog) {
         if (updatedBlog?._id == null) return;
+
+        toast({
+          title: "Blog Updated!",
+          status: "success",
+          duration: 3000,
+        });
 
         setCacheData("blogsPaginated", (prevData) => {
           if (!prevData?.nodes) return null;
