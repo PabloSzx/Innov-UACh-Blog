@@ -189,7 +189,7 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
   return (
     <>
       <Head key={1}>
-        <title>Noticias</title>
+        <title>Noticias - Comunidades Práctica INFO</title>
       </Head>
       {isPreview && <PreviewIndicator />}
       <Stack margin="15px" padding="25px">

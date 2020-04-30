@@ -7,7 +7,7 @@ const CommunityPage: NextPage = () => {
   return (
     <>
       <Head key={1}>
-        <title>Community</title>
+        <title>Comunidades - Comunidades Práctica INFO</title>
       </Head>
 
       <Stack

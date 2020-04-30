@@ -86,7 +86,7 @@ const AdminPage: NextPage<AdminPageProps> = ({ hasRebuildUrl }) => {
   return (
     <>
       <Head key={1}>
-        <title>Admin Panel</title>
+        <title>Admin Panel - Comunidades Práctica INFO</title>
       </Head>
       <AdminNavigation />
       <Stack shouldWrapChildren margin="15px">

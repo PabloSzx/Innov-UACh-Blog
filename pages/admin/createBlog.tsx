@@ -173,7 +173,7 @@ const CreateBlogPage: NextPage = () => {
     <>
       <AdminNavigation />
       <Head key={0}>
-        <title>Admin Blog Post Creation</title>
+        <title>Admin Blog Post Creation - - Comunidades Práctica INFO</title>
       </Head>
       <Stack margin="15px">
         <BlogPostForm

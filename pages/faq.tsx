@@ -15,7 +15,7 @@ const FAQPage: NextPage = () => {
   return (
     <>
       <Head key={1}>
-        <title>Preguntas frecuentes</title>
+        <title>Preguntas frecuentes - Comunidades Práctica INFO</title>
       </Head>
       <Stack marginTop="20px" paddingLeft="25px" paddingRight="25px">
         <Heading paddingBottom="20px">Preguntas frecuentes</Heading>

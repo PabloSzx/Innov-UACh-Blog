@@ -180,7 +180,7 @@ const EditBlogListPage: NextPage = () => {
     <>
       <AdminNavigation />
       <Head key={0}>
-        <title>Admin Blog Post List Edit</title>
+        <title>Admin Blog Post List Edit - Comunidades Práctica INFO</title>
       </Head>
       <Stack margin="15px">
         <Spinner

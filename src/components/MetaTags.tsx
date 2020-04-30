@@ -20,7 +20,7 @@ export const BlogMetaDataHead: FC<{
     },
     url,
   }) => {
-    const titleStr = `${title} - Comunidades UACh`;
+    const titleStr = `${title} - Comunidades Práctica INFO`;
 
     return (
       <Head>

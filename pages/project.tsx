@@ -7,7 +7,7 @@ const ProjectPage: NextPage = () => {
   return (
     <>
       <Head key={1}>
-        <title>Project</title>
+        <title>Proyecto - Comunidades Práctica INFO</title>
       </Head>
       <Stack paddingLeft="35px" paddingRight="35px" fontSize="1.3rem">
         <Heading as="h1" padding="20px">
