@@ -194,9 +194,10 @@ const IndexPage: NextPage<PageProps> = ({ blogList: { nodes }, isPreview }) => {
       {isPreview && <PreviewIndicator />}
       <Stack margin="15px" padding="25px">
         {firstBlog && <FirstBlogPost blog={nodes[0]} />}
-        <Divider />
+
         {afterFirstBlogNodes.length ? (
           <>
+            <Divider />
             <Heading textAlign="center" fontSize="3rem" paddingBottom="20px">
               Más noticias
             </Heading>

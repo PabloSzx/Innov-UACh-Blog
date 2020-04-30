@@ -61,7 +61,7 @@ export const Navigation: FC = () => {
           </Tab>
           <Tab disabled={true}>
             {/* <a href={navigationPaths[1]} onClick={preventDefault}> */}
-            Comunidad
+            Comunidades
             {/* </a> */}
           </Tab>
           <Tab>
