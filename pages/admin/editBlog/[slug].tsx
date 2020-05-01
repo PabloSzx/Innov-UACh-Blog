@@ -1,4 +1,4 @@
-import { Maybe, setCacheData } from "gqless-hooks";
+import { getAccessorFields, Maybe, setCacheData } from "gqless-hooks";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -50,34 +50,21 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
 
       if (!blogData) return null;
 
-      const {
-        _id,
-        title,
-        lead,
-        content,
-        urlSlug,
-        updatedAt,
-        createdAt,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      } = blogData;
-      return {
-        _id,
-        title,
-        lead,
-        content,
-        urlSlug,
-        updatedAt,
-        createdAt,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      };
+      return getAccessorFields(
+        blogData,
+        "_id",
+        "title",
+        "lead",
+        "content",
+        "urlSlug",
+        "updatedAt",
+        "createdAt",
+        "mainImage",
+        "mainImageAlt",
+        "author",
+        "metaDescription",
+        "metaSection"
+      );
     },
     {
       skip: !isAdmin,
@@ -101,35 +88,21 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
 
       if (!updatedBlog) return null;
 
-      const {
-        _id,
-        title,
-        content,
-        updatedAt,
-        createdAt,
-        lead,
-        urlSlug,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      } = updatedBlog;
-
-      return {
-        _id,
-        title,
-        content,
-        updatedAt,
-        createdAt,
-        lead,
-        urlSlug,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      };
+      return getAccessorFields(
+        updatedBlog,
+        "_id",
+        "title",
+        "content",
+        "createdAt",
+        "updatedAt",
+        "lead",
+        "urlSlug",
+        "mainImage",
+        "mainImageAlt",
+        "author",
+        "metaDescription",
+        "metaSection"
+      );
     },
     {
       sharedCacheId,
@@ -154,10 +127,6 @@ const EditBlogPage: NextPage<EditBlogPageProps> = ({ slug }) => {
               return blog;
             }),
           };
-        });
-
-        console.log({
-          updatedBlog,
         });
 
         if (updatedBlog.urlSlug !== slug) {

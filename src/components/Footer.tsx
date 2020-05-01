@@ -1,4 +1,4 @@
-import { FC, memo, useMemo, useState, useEffect } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import ProgressiveImage from "react-progressive-image";
 import { useWindowScroll, useWindowSize } from "react-use";
 
@@ -113,7 +113,7 @@ export const Footer: FC = memo(() => {
         </Flex>
         <Flex wrap="wrap" align="center" justify="center">
           <LogoImage
-            src="logos/logo_ingenieria.png"
+            src="/logos/logo_ingenieria.png"
             alt="Logo Ingeniería"
             width="180px"
             height="80px"

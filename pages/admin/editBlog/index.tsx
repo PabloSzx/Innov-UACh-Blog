@@ -1,4 +1,4 @@
-import { setCacheData } from "gqless-hooks";
+import { getArrayAccessorFields, setCacheData } from "gqless-hooks";
 import { uniqBy } from "lodash";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -128,36 +128,20 @@ const EditBlogListPage: NextPage = () => {
 
       return {
         hasNextPage,
-        nodes: nodes.map(
-          ({
-            _id,
-            title,
-            urlSlug,
-            createdAt,
-            updatedAt,
-            lead,
-            content,
-            mainImage,
-            mainImageAlt,
-            author,
-            metaDescription,
-            metaSection,
-          }: gqlessSharedCache["blogsPaginated"]["nodes"][number]) => {
-            return {
-              _id,
-              title,
-              urlSlug,
-              createdAt,
-              updatedAt,
-              lead,
-              content,
-              mainImage,
-              mainImageAlt,
-              author,
-              metaDescription,
-              metaSection,
-            };
-          }
+        nodes: getArrayAccessorFields(
+          nodes,
+          "_id",
+          "title",
+          "urlSlug",
+          "createdAt",
+          "updatedAt",
+          "lead",
+          "content",
+          "mainImage",
+          "mainImageAlt",
+          "author",
+          "metaDescription",
+          "metaSection"
         ),
       };
     },

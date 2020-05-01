@@ -1,4 +1,4 @@
-import { Maybe, setCacheData } from "gqless-hooks";
+import { getAccessorFields, Maybe, setCacheData } from "gqless-hooks";
 import { loremIpsum } from "lorem-ipsum";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -65,33 +65,20 @@ const CreateBlogPage: NextPage = () => {
         blog: blogVariables,
       });
 
-      const {
-        _id,
-        title,
-        content,
-        updatedAt,
-        createdAt,
-        urlSlug,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      } = blog;
-
-      return {
-        _id,
-        title,
-        content,
-        updatedAt,
-        createdAt,
-        urlSlug,
-        mainImage,
-        mainImageAlt,
-        author,
-        metaDescription,
-        metaSection,
-      };
+      return getAccessorFields(
+        blog,
+        "_id",
+        "title",
+        "content",
+        "updatedAt",
+        "createdAt",
+        "urlSlug",
+        "mainImage",
+        "mainImageAlt",
+        "author",
+        "metaDescription",
+        "metaSection"
+      );
     },
     {
       onCompleted(createdBlogData) {

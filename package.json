@@ -8,7 +8,8 @@
     "dev": "next dev",
     "generate": "gqless generate",
     "prettier": "prettier --check --write src/**/*.ts pages/**/*.ts api-lib/**/*.ts",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit --noUnusedLocals --noUnusedParameters"
   },
   "resolutions": {
     "@types/react": "^16.9.34",
@@ -29,7 +30,7 @@
     "date-fns-tz": "^1.0.10",
     "emotion-theming": "^10.0.27",
     "gqless": "^0.0.1-alpha.29",
-    "gqless-hooks": "^1.0.8",
+    "gqless-hooks": "^1.0.9",
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-scalars": "^1.1.2",
@@ -41,7 +42,7 @@
     "markdown-to-jsx": "^6.11.1",
     "micro": "^9.3.4",
     "mongodb": "^3.5.7",
-    "mongoose": "^5.9.10",
+    "mongoose": "^5.9.11",
     "ms": "^2.1.2",
     "next": "^9.3.6",
     "nprogress": "^0.2.0",
