@@ -9,8 +9,17 @@ const ProjectPage: NextPage = () => {
       <Head key={1}>
         <title>Proyecto - Comunidades Práctica INFO</title>
       </Head>
-      <Stack paddingLeft="35px" paddingRight="35px" fontSize="1.3rem">
-        <Heading as="h1" padding="20px">
+      <Stack
+        marginTop="20px"
+        paddingLeft={["15px", "35px"]}
+        paddingRight={["15px", "20px", "20px", "35px"]}
+        fontSize={["1rem", "1.3rem"]}
+      >
+        <Heading
+          as="h1"
+          fontSize={["1.5rem", "2rem"]}
+          padding={["0px", "5px", "10px", "20px"]}
+        >
           Comunidades de práctica como fomento del aprendizaje colaborativo y la
           vinculación con la sociedad de los estudiantes de Ingeniería Civil en
           Informática.

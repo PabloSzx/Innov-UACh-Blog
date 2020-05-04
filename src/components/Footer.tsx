@@ -75,6 +75,7 @@ const LogoImage: FC<{
             isLoaded={!loading}
           >
             <Image
+              padding="7px"
               background="white"
               borderRadius="10px"
               objectFit="contain"
@@ -103,15 +104,7 @@ export const Footer: FC = memo(() => {
         alignItems="center"
         paddingTop="20px"
       >
-        <Flex paddingBottom="5px">
-          <LogoImage
-            src="/logos/logo_uach.jpg"
-            alt="Logo UACh"
-            height="65px"
-            width="300px"
-          />
-        </Flex>
-        <Flex wrap="wrap" align="center" justify="center">
+        <Flex wrap="wrap" paddingBottom="5px" justify="center" align="center">
           <LogoImage
             src="/logos/logo_ingenieria.png"
             alt="Logo Ingeniería"
@@ -125,9 +118,12 @@ export const Footer: FC = memo(() => {
             width="210px"
             height="100px"
           />
-        </Flex>
-
-        <Flex wrap="wrap" align="center" justify="center" paddingBottom="10px">
+          <LogoImage
+            src="/logos/logo_uach.jpg"
+            alt="Logo UACh"
+            height="75px"
+            width="300px"
+          />
           <LogoImage
             src="/logos/logo_dacic.png"
             alt="Logo DACIC"
@@ -153,14 +149,14 @@ export const Footer: FC = memo(() => {
         </Text>
         <Stack
           marginTop="20px"
+          marginBottom="10px"
           id="contact_us"
           background="#777"
-          borderTopLeftRadius="25px"
-          borderTopRightRadius="25px"
+          borderRadius="25px"
           paddingTop="10px"
           paddingLeft="20px"
           paddingRight="20px"
-          paddingBottom="5px"
+          paddingBottom="10px"
           color="white"
           alignItems="center"
           textAlign="center"

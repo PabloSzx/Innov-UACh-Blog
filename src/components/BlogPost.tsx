@@ -39,8 +39,8 @@ export const BlogPost: FC<BlogPostProps> = memo(
         ) : null}
         <Heading
           wordBreak="normal"
-          margin={["10px", "20px", "30px"]}
-          fontSize={["2.5rem", "2.5rem", "4rem", "5.5rem"]}
+          margin={["10px", "12px", "15px"]}
+          fontSize={["2rem", "2.2rem", "2.3rem", "2.5rem"]}
           as="h1"
         >
           {title}
@@ -62,6 +62,7 @@ export const BlogPost: FC<BlogPostProps> = memo(
             marginLeft={marginSides}
             marginRight={marginSides}
             children={lead}
+            fontSize="1rem"
           />
         ) : null}
         <Box padding="15px" />
@@ -70,10 +71,15 @@ export const BlogPost: FC<BlogPostProps> = memo(
           marginLeft={marginSides}
           marginRight={marginSides}
           children={content}
+          fontSize="1rem"
         />
 
         {updatedAtString !== createdAtString && (
-          <Text margin={["10px", "20px", "20px"]} marginTop="20px">
+          <Text
+            margin={["10px", "20px", "20px"]}
+            marginTop="20px"
+            fontSize="0.7rem"
+          >
             Última modificación {updatedAtString}
           </Text>
         )}
