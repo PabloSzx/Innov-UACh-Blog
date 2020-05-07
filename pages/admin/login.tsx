@@ -70,7 +70,7 @@ const AdminLoginPage: NextPage = () => {
           onClick={() => {
             login({
               variables: {
-                token: tokenState,
+                token: tokenState.trim(),
               },
             });
             setToken("");
