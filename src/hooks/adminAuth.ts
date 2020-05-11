@@ -3,15 +3,14 @@ import NProgress from "nprogress";
 import { useEffect } from "react";
 import { useIsomorphicLayoutEffect } from "react-use";
 
-import { useMutation, useQuery } from "../graphql";
+import { useMutation, prepareQuery } from "../graphql";
 
-declare global {
-  interface gqlessHooksPool {
-    currentUser: {
-      data: boolean;
-    };
-  }
-}
+export const currentUserQuery = prepareQuery({
+  cacheId: "currentUser",
+  query: ({ currentUser }) => {
+    return currentUser;
+  },
+});
 
 let redirectPath: string | undefined;
 
@@ -23,13 +22,9 @@ export const useAdminAuth = ({
 }: { requireAdmin?: boolean; redirectOnSuccess?: boolean } = {}) => {
   const { asPath, push } = useRouter();
 
-  const [{ data: isAdmin, fetchState: currentUserState }] = useQuery(
-    ({ currentUser }) => currentUser,
-    {
-      sharedCacheId: "currentUser",
-      hookId: "currentUser",
-    }
-  );
+  const [
+    { data: isAdmin, fetchState: currentUserState },
+  ] = currentUserQuery.useQuery();
 
   const isCurrentUserLoading =
     (redirectOnSuccess && isAdmin) || (requireAdmin && !isAdmin)
@@ -60,8 +55,8 @@ export const useAdminAuth = ({
   }, [currentUserState, isAdmin, requireAdmin, redirectOnSuccess]);
 
   const [logout] = useMutation(({ logout }) => logout, {
-    onCompleted(_, hooksPool) {
-      hooksPool.currentUser?.refetch?.();
+    onCompleted() {
+      currentUserQuery.setCacheData(false);
     },
   });
 

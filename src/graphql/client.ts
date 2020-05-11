@@ -7,7 +7,7 @@ const endpoint = IS_BROWSER
   ? "/api/graphql"
   : "https://innov-uach-blog.now.sh/api/graphql";
 
-export const useQuery = createUseQuery<Query>({
+export const { useQuery, prepareQuery } = createUseQuery<Query>({
   schema,
   endpoint,
   creationHeaders: {

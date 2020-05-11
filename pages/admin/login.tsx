@@ -11,9 +11,10 @@ import {
 } from "@chakra-ui/core";
 
 import { useMutation } from "../../src/graphql";
-import { useAdminAuth } from "../../src/hooks/adminAuth";
+import { useAdminAuth, currentUserQuery } from "../../src/hooks/adminAuth";
 
 import type { NextPage } from "next";
+
 const AdminLoginPage: NextPage = () => {
   const [message, setMessage] = useState("");
   const [tokenState, setToken] = useState("");
@@ -30,9 +31,9 @@ const AdminLoginPage: NextPage = () => {
       variables: {
         token: tokenState,
       },
-      onCompleted(goodLogin, hooksPool) {
+      onCompleted(goodLogin) {
         if (goodLogin) {
-          hooksPool.currentUser?.refetch?.();
+          currentUserQuery.setCacheData(true);
           setMessage("Redirecting...");
         } else {
           setMessage("Wrong token");
