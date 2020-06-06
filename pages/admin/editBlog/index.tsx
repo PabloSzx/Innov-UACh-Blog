@@ -158,7 +158,7 @@ const EditBlogListPage: NextPage = () => {
 
   if (isCurrentUserLoading) return <Spinner size="xl" margin="50px" />;
 
-  const blogNodes = blogsPaginated.data?.nodes;
+  const blogNodes = blogsPaginated.data?.nodes.filter(({ _id }) => _id);
 
   return (
     <>
@@ -173,6 +173,11 @@ const EditBlogListPage: NextPage = () => {
             blogsPaginated.data != null
           }
         />
+
+        {blogsPaginated.fetchState !== "loading" &&
+          (blogNodes?.length ?? 0) === 0 && (
+            <Text fontWeight="bold">No blog posts available</Text>
+          )}
 
         {blogNodes?.map((blog, index) => {
           return <BlogBox key={blog._id} blog={blog} index={index + 1} />;

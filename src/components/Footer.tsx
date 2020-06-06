@@ -1,6 +1,7 @@
 import { FC, memo, useEffect, useState } from "react";
 import ProgressiveImage from "react-progressive-image";
-import { useWindowScroll, useWindowSize } from "react-use";
+import useWindowScroll from "react-use/lib/useWindowScroll";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 import {
   Box,

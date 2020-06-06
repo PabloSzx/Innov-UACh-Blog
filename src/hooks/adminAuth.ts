@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import NProgress from "nprogress";
 import { useEffect } from "react";
-import { useIsomorphicLayoutEffect } from "react-use";
+import useIsomorphicLayoutEffect from "react-use/lib/useIsomorphicLayoutEffect";
 
-import { useMutation, prepareQuery } from "../graphql";
+import { prepareQuery, useMutation } from "../graphql";
 
 export const currentUserQuery = prepareQuery({
   cacheId: "currentUser",

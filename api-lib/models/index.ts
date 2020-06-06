@@ -6,6 +6,7 @@ export const mongooseConection = mongoose.connect(
   MONGODB_URL || "mongodb://localhost:27017/uachInnovBlog",
   {
     useNewUrlParser: true,
+    useFindAndModify: false,
     useUnifiedTopology: true,
     useCreateIndex: true,
     poolSize: 1,
