@@ -7,7 +7,7 @@
     "build": "next build",
     "dev": "next dev",
     "generate": "gqless generate",
-    "prettier": "prettier --check --write src/**/*.ts pages/**/*.ts api-lib/**/*.ts",
+    "prettier": "prettier --check --write *.js src/**/*.ts pages/**/*.ts api-lib/**/*.ts",
     "start": "next start",
     "typecheck": "tsc --noEmit --noUnusedLocals --noUnusedParameters"
   },
@@ -64,6 +64,7 @@
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
     "@next/bundle-analyzer": "^9.4.4",
+    "@prefresh/next": "^0.3.0",
     "@types/cookie": "^0.4.0",
     "@types/graphql-iso-date": "^3.3.3",
     "@types/jsonwebtoken": "^8.5.0",

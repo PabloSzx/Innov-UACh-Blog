@@ -1,7 +1,10 @@
+const withPrefresh = require("@prefresh/next");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE !== undefined,
 });
 
-module.exports = withBundleAnalyzer({
-  poweredByHeader: false,
-});
+module.exports = withPrefresh(
+  withBundleAnalyzer({
+    poweredByHeader: false,
+  })
+);
